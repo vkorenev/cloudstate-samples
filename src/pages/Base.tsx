@@ -74,8 +74,6 @@ class Base extends React.Component<Props & WithStyles<typeof styles>, State> {
   render() {
     console.log("APP RENDER!!", this.props);
     const classes = this.props.classes;    
-
-    const errors = this.props.store.errorStore.errors as Error[];
     return (    
       <div className={classes.root}>
         <nav className={classes.drawer}>

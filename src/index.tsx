@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
-import createBrowserHistory from 'history/createBrowserHistory';
+import * as historyModule from 'history';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import { Router } from 'react-router';
 
 
 //import App from './App';
 
-const browserHistory = createBrowserHistory();
+const browserHistory = historyModule.createBrowserHistory();
 
 import stores from './stores/index';
 import Base from './pages/Base';
