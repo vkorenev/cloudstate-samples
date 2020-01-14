@@ -16,7 +16,8 @@ export interface Friend{
 }
 
 export interface ChatMessage{
-    to: string;
+    from: User;
+    to: User;
     msg: string;
 }
 
@@ -31,6 +32,9 @@ class UserStore{
     addUserList(list: User[]){
         list.map( x => this.addUser(x));
     }   
+    removeUser(u: User){
+        delete this.users[u.name];
+    }
 }
 
 class FriendStore{
@@ -47,14 +51,13 @@ class ChatStore{
     @observable chats: { [id:string]:ChatMessage[] } = {};     
     mkKey = (name1: string, name2: string) => [name1, name2].sort( (a, b) => b.localeCompare(a) ).join("-")
     addChatMessage(u: User, m: ChatMessage) {
-        const key = this.mkKey(u.name, m.to);
+        const key = this.mkKey(u.name, m.to.name);
         if(!this.chats[key])this.chats[key] = [];
         this.chats[key] = [...this.chats[key], m];        
     }  
-    getChatMessages(u: User, friend: Friend){
+    getChatMessages(u: User, friend: User){
         const key = this.mkKey(u.name, friend.name);
-        if(!this.chats[key])this.chats[key] = [];
-        return this.chats[key] = [];
+        return this.chats[key] || [];
     } 
 }
 

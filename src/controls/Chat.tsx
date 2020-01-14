@@ -89,23 +89,29 @@ interface Props {
 type State = {
     friendAddOpen: boolean;
     msg: string;
+    selectedFriend: User;
 }
 
 @observer
 class Chat extends React.Component<Props & WithStyles<typeof styles>, State> {  
   state = {
     friendAddOpen: false,
-    msg: ""
+    msg: "",
+    selectedFriend: undefined,
   }
   constructor(props){    
     super(props);
-  }    
+  } 
+  messagesEnd = undefined;   
   
   onChange = (key) => (event) => {
       let x = {}
       x[key] = event.target.value;
       this.setState(x);
   } 
+  closeChat = () => {
+      this.props.store.userStore.removeUser(this.props.user);
+  }
   handleFriendAddClose = () => {
       this.setState({friendAddOpen: false})
   }
@@ -113,28 +119,49 @@ class Chat extends React.Component<Props & WithStyles<typeof styles>, State> {
     this.setState({friendAddOpen: true})
     }
   handleFriendAdded = (friend: Friend) => {
-      this.props.store.friendStore.addFriend(this.props.user, friend);
-      this.handleFriendAddClose();
+    const friendUser = this.props.store.userStore.users[friend.name];
+    this.setState({selectedFriend: friendUser})
+    console.log("user: " + this.props.user.name + "adding friend", friend);
+    this.props.store.friendStore.addFriend(this.props.user, {name: friend.name} as Friend );
+    this.handleFriendAddClose();
   }
   handleMsgChange = (event) =>{
       this.setState({msg: event.target.value});
   }
+  handleMaybeSend = (event) => {
+    if (event.key === "Enter") {
+      this.sendMessage();
+    }
+  }
+  selectFriend = (user: User) => () => {
+      this.setState({selectedFriend: user})
+  }
   sendMessage = () =>{
-    // TODO: selected friend
-    //this.props.store.chatStore.addChatMessage(this.props.user, {msg: this.state.msg, to: } as ChatMessage);
+    if(this.state.selectedFriend){
+        this.props.store.chatStore.addChatMessage(this.props.user, {msg: this.state.msg, to: this.state.selectedFriend, from: this.props.user} as ChatMessage);        
+    }
+    this.setState({msg: ""});
+  }
+  scrollToBottom = () => {
+    //console.log("scroll", this.messagesEnd)
+    if(this.messagesEnd)
+        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
   
-  render() {    
+  render() {   
+    this.scrollToBottom();
+    let ind = 0; 
     const  classes = this.props.classes;  
     const friends = this.props.store.friendStore.friends[this.props.user.name] &&
                     this.props.store.friendStore.friends[this.props.user.name].map(x => this.props.store.userStore.users[x.name] as User ) as User[];  
+    this.scrollToBottom();
     return (<React.Fragment>
       <Paper className={classes.paper}>
         <div className={classes.friendsList}>
         <Button color="primary" className={classes.addFriend} onClick={this.handleOpenFriendDialog}>Add a Friend</Button>
         <List>
-            {friends && friends.map(u => (
-                <ListItem button key={u.name}>
+            {friends && friends.filter(x => x).map(u => (
+                <ListItem button onClick={this.selectFriend(u)} key={u.name} selected={this.state.selectedFriend && this.state.selectedFriend.name == u.name}>
                     <ListItemIcon><Avatar src={u.avatar} /></ListItemIcon> 
                     <ListItemText primary={u.name} secondary={u.online ? "online" : "offline"}></ListItemText>
                 </ListItem>
@@ -146,25 +173,34 @@ class Chat extends React.Component<Props & WithStyles<typeof styles>, State> {
             <Typography className={classes.title} variant="h5" gutterBottom>
                 {this.props.user.name}
             </Typography>
-            <IconButton color="default" aria-label="close" component="span">
+            <IconButton onClick={this.closeChat} color="default" aria-label="close" component="span">
                 <CloseIcon />
             </IconButton>                     
         </div>
         <div className={classes.scrollable} >
         <List>
-            <ListItem key={1}>
-                <ListItemIcon><Avatar>A</Avatar></ListItemIcon> 
-                <ListItemText primary={"adam"} secondary={"Hello how are you doing?"} />
+            {(this.state.selectedFriend ?
+                this.props.store.chatStore.getChatMessages(this.props.user, this.state.selectedFriend).map( c => {
+                    const key = "chat"+c.from.name+"-"+c.to.name+ind;
+                    ind = ind+1;
+                    return (
+                    <ListItem key={key}>
+                        <ListItemIcon><Avatar src={c.from.avatar} /></ListItemIcon> 
+                        <ListItemText primary={c.from.name} secondary={c.msg} />
+                    </ListItem>)})
+            :
+            <ListItem key={"info"}>
+                <Typography>Add or Select a friend to chat with</Typography>
             </ListItem>
-            <ListItem key={2}>
-                <ListItemIcon><Avatar>U</Avatar></ListItemIcon> 
-                <ListItemText primary={"you"} secondary={"Hey there Adam I am doing fine."} />
-            </ListItem>
+            )}
         </List>
+        <div style={{ float:"left", clear: "both" }}
+             ref={(el) => { this.messagesEnd = el; }}>
+        </div>
         </div>
         <div className={classes.chat}>
             <div className={classes.flex}>
-                <TextField value={this.state.msg} onChange={this.handleMsgChange} className={classes.msgBox} fullWidth placeholder="enter message" />
+                <TextField value={this.state.msg} onChange={this.handleMsgChange} onKeyPress={this.handleMaybeSend} className={classes.msgBox} fullWidth placeholder="enter message" />
                 <Fab onClick={this.sendMessage} style={ {width: 64, margin: 4} } color="primary" aria-label="send">
                     <SendIcon />
                 </Fab>
