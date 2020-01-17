@@ -30,7 +30,7 @@
     "@material-ui/lab": "^4.0.0-alpha.38",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
-    "cloudstate": "file:../cloudstate/node-support",
+    "cloudstate": "file:../../cloudstate/node-support",
     "clsx": "^1.0.4",
     "debug": "^4.1.1",
     "express": "^4.17.1",
@@ -62,7 +62,7 @@
     "mobx-react-devtools": "^6.0.3"
   },
   "scripts": {
-    "prestart": "compile-descriptor friends.proto",
+    "prestart": "compile-descriptor chat.proto",
     "start": "node index.js",
     "start-no-prestart": "node index.js",
     "build": "webpack --config webpack.config.js",
