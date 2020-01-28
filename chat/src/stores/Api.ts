@@ -8,9 +8,10 @@ import { User as UserPesence, OnlineStatus } from '../_proto/presence_pb';
 
 export class Api{
     store: any = null;
-    host = "http://localhost:9090";
+    host = window.location.protocol + "//"+window.location.hostname + (window.location.hostname == "localhost" ? ":" + window.location.port : "");
 
     presenceStreams: {[id:string]:ResponseStream<OnlineStatus>} = {};
+    presenceOnlineStreams: {[id:string]:ResponseStream<Empty>} = {}; 
   
     setStore = (store) => {
         this.store = store;
@@ -34,6 +35,7 @@ export class Api{
             const userpb = new Userpb();
             userpb.setUser(user.name)
             client.getFriends(userpb, metadata,  (err: ServiceError, response: FriendsList) => {
+                    console.log("getFriends response:", response);
                     if(!err){
                         response.getFriendsList().map( f => {
                             console.log("user: " + user.name + "adding friend", f);
@@ -69,6 +71,26 @@ export class Api{
         });           
     }
 
+    monitorPresence = (user: User) =>{
+        const client = new PresenceClient(this.host);    
+        const userpb = new UserPesence();
+        userpb.setName(user.name);
+        const presenceStream = client.monitor(userpb);
+        if(this.presenceStreams[user.name])delete this.presenceStreams[user.name];
+        this.presenceStreams[user.name] = presenceStream;
+        console.log("monitor presence of user: ", user);        
+        presenceStream.on("status", (status) =>{
+            console.log("status for: " + user.name, status);
+            if(status.code == 0){   // connection ok
+                //this.store.userStore.users[user.name].online = false;
+                presenceStream.on("end", () =>{
+                    console.log("stream end for user", user);
+                    this.store.userStore.users[user.name].online = false;
+                });
+            }
+        });
+    }
+
     addUser = (user: User) => {
         console.log("addUser", user);
         this.store.userStore.addUser( {...user, online: true} );
@@ -77,8 +99,9 @@ export class Api{
         
         const upb = new Userpb();
         upb.setUser(user.name)
-        const fclient = new FriendsClient(this.host);    
+        const fclient = new FriendsClient(this.host,{debug: true});    
         console.log("getFriends", upb);
+        console.log("Calling grpc on host: " + this.host)
         fclient.getFriends(upb, metadata,  (err: ServiceError, response: FriendsList) => {
             console.log("GOT", response)
             if(!err){
@@ -86,36 +109,27 @@ export class Api{
                     console.log("user: " + user.name + "adding friend", f);
                     this.store.friendStore.addFriend(user, {name: f.getUser(), avatar: f.getAvatar()} as Friend );
                     if(!this.store.userStore.users[f.getUser()]){
-                        this.store.userStore.addUser({name: f.getUser(), avatar: f.getAvatar()} as User );
+                        const u = {name: f.getUser(), avatar: f.getAvatar(), online: false} as User;
+                        this.store.userStore.addUser(u);
+                        this.monitorPresence(u);
                     }
                 })
             }else{
                 console.error("ERROR getting friends", err);
             }
         });
-                
         const userpb = new UserPesence();
         userpb.setName(user.name);
-        client.connect(userpb, metadata);
-        const presenceStream = client.monitor(userpb,metadata);
-        if(this.presenceStreams[user.name])delete this.presenceStreams[user.name];
-        this.presenceStreams[user.name] = presenceStream;
-        presenceStream.on("status", (status) =>{
-            console.log("status", status);
-            if(status.code == 0){   // connection ok
-                presenceStream.on("end", () =>{
-                    console.log("stream end for user", user);
-                    this.store.userStore.users[user.name].online = false;
-                });
-            }
-        });   
-        
+        console.log("connect presence", user);
+        this.presenceOnlineStreams[user.name] = client.connect(userpb, metadata);              
     }
 
     userOffline = (user: User) => {
+        console.log("user: " + user.name + " going offline");
         this.store.userStore.users[user.name].online = false;
-        if(this.presenceStreams[user.name]){
-            this.presenceStreams[user.name].cancel();
+        if(this.presenceOnlineStreams[user.name]){
+            console.log("cancel presence stream for user: " + user.name);
+            this.presenceOnlineStreams[user.name].cancel();
             delete this.presenceStreams[user.name];
         }
     }

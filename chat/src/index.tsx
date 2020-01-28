@@ -15,6 +15,8 @@ import Base from './pages/Base';
 
 const history = syncHistoryWithStore(browserHistory, stores.routing);
 
+console.log("chat app version: 1.0.7");
+
 ReactDOM.render(   
     <Provider {...stores}>
         <Router history={history}>

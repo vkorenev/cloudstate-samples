@@ -23,7 +23,7 @@
     "directory": "presence"
   },
   "dependencies": {
-    "cloudstate": "0.0.2"
+    "cloudstate": "0.0.3"
   },
   "scripts": {
     "prestart": "compile-descriptor presence.proto",

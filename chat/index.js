@@ -2,16 +2,12 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const fs = require('fs');
-const crdt = require("cloudstate").crdt;
+const Stateless = require("cloudstate").Stateless;
 
 app.use("/site", express.static("public"));
 
 server.listen(3000);
-console.log("Http Servee running on " + server.address().address + ":" + server.address().port);
-
-
-
-
+//console.log("Http Servee running on " + server.address().address + ":" + server.address().port);
 
 
 let indexPage = Buffer.from("");
@@ -45,21 +41,25 @@ function getBundleJs(user){
 
 function getBundleImg(imgRequest){
     console.log("**** imgRequest!!!!! " + process.cwd() , imgRequest);  
+    var img = fs.readFileSync('./public/imgs/'+imgRequest.img).toString("base64");
+    return {
+        content_type: "image/png",
+        data: img
+      }
 }
 
-const entity = new crdt.Crdt(
+const cloudstate = new Stateless(
     "chat.proto",
     "cloudstate.samples.chat.chat.Chat"
-  );
+);
 
-  entity.commandHandlers = {
+cloudstate.commandHandlers = {
     GetChatPage: getChatPage,
     GetBundleJs: getBundleJs,
     GetBundleImg: getBundleImg
-  };
+};
   
-  module.exports = entity;
-
+module.exports = cloudstate;
 
 const opts = {};
 
@@ -67,4 +67,4 @@ if (process.env.PORT) {
     opts.bindPort = process.env.PORT;
 }
 
-entity.start(opts);
+cloudstate.start(opts);

@@ -11,6 +11,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { observe, toJS } from 'mobx';
 import FriendDialog from './FriendDialog';
 import { User, Friend, ChatMessage } from '../stores';
+import UserAvatar from './UserAvatar';
 
 const friendsListWidth = 220;
 
@@ -152,8 +153,8 @@ class Chat extends React.Component<Props & WithStyles<typeof styles>, State> {
     this.scrollToBottom();
     let ind = 0; 
     const  classes = this.props.classes;  
-    const friends = this.props.store.friendStore.friends[this.props.user.name] &&
-                    this.props.store.friendStore.friends[this.props.user.name].map(x => this.props.store.userStore.users[x.name] as User ) as User[];  
+    const friends = (this.props.store.friendStore.friends[this.props.user.name] &&
+                    this.props.store.friendStore.friends[this.props.user.name].map(x => this.props.store.userStore.users[x.name] as User ) as User[]).sort( (a, b) => a.name.localeCompare(b.name) );  
     this.scrollToBottom();
     return (<React.Fragment>
       <Paper className={classes.paper}>
@@ -162,7 +163,7 @@ class Chat extends React.Component<Props & WithStyles<typeof styles>, State> {
         <List>
             {friends && friends.filter(x => x).map(u => (
                 <ListItem button onClick={this.selectFriend(u)} key={u.name} selected={this.state.selectedFriend && this.state.selectedFriend.name == u.name}>
-                    <ListItemIcon><Avatar src={u.avatar} /></ListItemIcon> 
+                    <ListItemIcon><UserAvatar user={u} store={this.props.store} /></ListItemIcon> 
                     <ListItemText primary={u.name} secondary={u.online ? "online" : "offline"}></ListItemText>
                 </ListItem>
             ) )}            

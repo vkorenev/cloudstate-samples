@@ -15,6 +15,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Chat from '../controls/Chat';
 import UserDialog from '../controls/UserDialog';
 import { User } from '../stores';
+import UserAvatar from '../controls/UserAvatar';
 
 const drawerWidth = 256;
 
@@ -101,7 +102,7 @@ type Props = {
 @observer
 class Base extends React.Component<Props & WithStyles<typeof styles>, State> {
   state = {
-    open: false,
+    open: true,
     userDialogOpen: false,
   };
   
@@ -187,15 +188,16 @@ class Base extends React.Component<Props & WithStyles<typeof styles>, State> {
             </IconButton>
           </div>
           <Divider />
+          {/*
           <List className={classes.listPadding}>
               <ListItem button key={"chat"}>
                 <ListItemIcon><ChatIcon /></ListItemIcon>
                 <ListItemText primary={"Chat"} />
               </ListItem>
           </List>
-           
+          */}
           <List className={classes.listPadding}>
-              <ListItem button onClick={this.handelOnUserAddOpen} key={"add_uer"}>
+              <ListItem button onClick={this.handelOnUserAddOpen} key={"add_user"}>
                 <ListItemIcon><PersonAddIcon /></ListItemIcon>
                 <ListItemText primary={"Add User"} />
               </ListItem>
@@ -203,8 +205,8 @@ class Base extends React.Component<Props & WithStyles<typeof styles>, State> {
           <Divider />
           <List className={classes.listPadding}>
             {this.props.store.userStore.stream.filter(x => !x.online).map(user => (
-              <ListItem button onClick={this.handelOnUserOnline(user)} key={"add_uer"}>
-                <ListItemIcon><Avatar src={user.avatar} /></ListItemIcon>
+              <ListItem button onClick={this.handelOnUserOnline(user)} key={user.name}>
+                <ListItemIcon><UserAvatar user={user} store={this.props.store} /></ListItemIcon>
                 <ListItemText primary={user.name} />
               </ListItem>
                ))} 

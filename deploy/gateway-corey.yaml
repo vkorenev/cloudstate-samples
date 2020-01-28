@@ -1,9 +1,0 @@
-# Stateful service descriptor for the gateway app
-apiVersion: cloudstate.io/v1alpha1
-kind: StatefulService
-metadata:
-  name: gateway
-spec:
-  containers:
-  - image: coreyauger/coreygateway:latest
-    name: gateway

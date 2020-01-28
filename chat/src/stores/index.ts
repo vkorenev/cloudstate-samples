@@ -26,7 +26,7 @@ export interface ChatMessage{
 class UserStore{
     @observable users: { [id:string]:User } = {};    
     @computed get stream(){
-        return Object.keys(this.users).map(x => this.users[x]).sort( (a, b) => b.name.localeCompare(a.name) )
+        return Object.keys(this.users).map(x => this.users[x]).sort( (a, b) => a.name.localeCompare(b.name) )
     }
     addUser(u: User) {
         this.users[u.name] = u
