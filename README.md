@@ -1,13 +1,17 @@
 
 # Cloudstate Sample Chat Application
 
-The following assumes that you have compleated the steps for setting up your local environment as well as creating an account and project.  If you have not done this you must follow the instructions here:
+The following assumes that you have completed the steps for setting up your local environment as well as creating an account and project.  If you have not done this you must follow the instructions here:
 
 * [Setting Up your Machine](https://docs.lbcs.dev/gettingstarted/setup.html)
 * [Your Lightbend Cloudstate Account](https://docs.lbcs.dev/gettingstarted/account.html)
 * [Creating a Project](https://docs.lbcs.dev/gettingstarted/project.html)
 
 ## Sample application layout
+Grab the sample application from github:
+
+[https://github.com/coreyauger/cloudstate-chat-sample](https://github.com/coreyauger/cloudstate-chat-sample)
+
 The sample application consists of 3 services:
 * A stateless service `chat`
 * A stateful Entity based service `friends`
@@ -116,7 +120,7 @@ statefulservice.cloudstate.io/friends created
 
 
 ### Chat
-The chat service is a front end web application written in typescript.  It is backed by a `stateless` service that will server the compiled javacript, html and images.
+The chat service is a front end web application written in typescript.  It is backed by a `stateless` service that will serve the compiled javacript, html and images.
 
 This service makes `grpc-web` calls directly to the other services to get the data that it needs.  In order to do this we need to compile the proto definitions from the other 2 services as well as generate the grpc-web clients.  This is all done with a shell script `protogen.sh`.  Let's first run the protogen, then compile the service definition and finally compile our typescript.
 
