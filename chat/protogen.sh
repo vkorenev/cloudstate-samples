@@ -11,21 +11,21 @@ PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
 
 echo "Compile cloudstate entity key"
 protoc \
-    --proto_path="../cloudstate/protocols/frontend/google/api/" \
+    --proto_path="node_modules/cloudstate/proto/google/api/" \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/google/api" \
     --ts_out="service=grpc-web:${OUT_DIR}/google/api" \
     httpbody.proto
 
 protoc \
-    --proto_path="../cloudstate/protocols/frontend/google/api/" \
+    --proto_path="node_modules/cloudstate/proto/google/api/" \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/google/api" \
     --ts_out="service=grpc-web:${OUT_DIR}/google/api" \
     http.proto
 
 protoc \
-    --proto_path="../cloudstate/protocols/frontend/google/api/" \
+    --proto_path="node_modules/cloudstate/proto/google/api/" \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/google/api" \
     --ts_out="service=grpc-web:${OUT_DIR}/google/api" \
@@ -33,7 +33,7 @@ protoc \
     annotations.proto
 
 protoc \
-    --proto_path="../cloudstate/protocols/frontend/cloudstate/" \
+    --proto_path="node_modules/cloudstate/proto/cloudstate/" \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/cloudstate" \
     --ts_out="service=grpc-web:${OUT_DIR}/cloudstate" \
@@ -41,8 +41,8 @@ protoc \
 
 echo "Compiling Chat Service"
 protoc \
-  -I ../cloudstate/protocols/frontend/google/api/ \
-  -I ../cloudstate/protocols/frontend/ \
+  -I node_modules/cloudstate/proto/google/api/ \
+  -I node_modules/cloudstate/proto/cloudstate/ \
   --include_imports \
   --proto_path=node_modules/cloudstate/proto \
   --proto_path=node_modules/cloudstate/protoc/include \
@@ -56,8 +56,8 @@ protoc \
     --js_out="import_style=commonjs,binary:${OUT_DIR}" \
     --ts_out="service=grpc-web:${OUT_DIR}" \
     --proto_path="../friends" \
-    -I ../cloudstate/protocols/frontend/google/api/ \
-    -I ../cloudstate/protocols/frontend/ \
+    -I node_modules/cloudstate/proto/google/api/ \
+    -I node_modules/cloudstate/proto/ \
      friends.proto
 
 echo "Compile Presence Service"
@@ -66,6 +66,6 @@ protoc \
     --js_out="import_style=commonjs,binary:${OUT_DIR}" \
     --ts_out="service=grpc-web:${OUT_DIR}" \
     --proto_path="../presence" \
-    -I ../cloudstate/protocols/frontend/google/api/ \
-    -I ../cloudstate/protocols/frontend/ \
+    -I node_modules/cloudstate/proto/google/api/ \
+    -I node_modules/cloudstate/proto/ \
      presence.proto
