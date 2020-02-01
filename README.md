@@ -4,8 +4,8 @@
 The following assumes that you have completed the steps for setting up your local environment as well as creating an account and project.  If you have not done this you must follow the instructions here:
 
 * [Setting Up your Machine](https://docs.lbcs.dev/gettingstarted/setup.html)
-   * including the [Developer prerequisites](https://docs.lbcs.dev/developing/developing.html#prerequisites)
-   * and the protobuf compiler
+   * as well as the [Developer prerequisites](https://docs.lbcs.dev/developing/developing.html#prerequisites)
+   * You also need to install the protobuf compiler.
 * [Your Lightbend Cloudstate Account](https://docs.lbcs.dev/gettingstarted/account.html)
 * [Creating a Project](https://docs.lbcs.dev/gettingstarted/project.html)
 
