@@ -153,9 +153,10 @@ class Chat extends React.Component<Props & WithStyles<typeof styles>, State> {
     this.scrollToBottom();
     let ind = 0; 
     const  classes = this.props.classes;  
-    const friends = (this.props.store.friendStore.friends[this.props.user.name] &&
-                    this.props.store.friendStore.friends[this.props.user.name].map(x => this.props.store.userStore.users[x.name] as User ) as User[]).sort( (a, b) => a.name.localeCompare(b.name) );  
-    this.scrollToBottom();
+    let friends = (this.props.store.friendStore.friends[this.props.user.name] &&
+                    this.props.store.friendStore.friends[this.props.user.name].map(x => this.props.store.userStore.users[x.name] as User ) as User[])
+    if(friends)friends = friends.sort( (a, b) => a.name.localeCompare(b.name) );  
+    //this.scrollToBottom();
     return (<React.Fragment>
       <Paper className={classes.paper}>
         <div className={classes.friendsList}>

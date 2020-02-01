@@ -16,7 +16,7 @@ static_resources:
               path: "/dev/stdout"
           route_config:
             name: local_route
-            request_headers_to_remove: ["grpc-accept-encoding"]
+            #request_headers_to_remove: ["grpc-accept-encoding"]
             virtual_hosts:
             - name: local_service
               domains: ["*"]

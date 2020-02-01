@@ -82,13 +82,13 @@ export class Api{
         presenceStream.on("status", (status) =>{
             console.log("status for: " + user.name, status);
             if(status.code == 0){   // connection ok
-                //this.store.userStore.users[user.name].online = false;
-                presenceStream.on("end", () =>{
-                    console.log("stream end for user", user);
-                    this.store.userStore.users[user.name].online = false;
-                });
+                //this.store.userStore.users[user.name].online = false;                
             }
         });
+        presenceStream.on("end", () =>{
+            console.log("stream end for user", user);
+            this.store.userStore.users[user.name].online = false;
+        });        
     }
 
     addUser = (user: User) => {
