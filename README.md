@@ -4,13 +4,15 @@
 The following assumes that you have completed the steps for setting up your local environment as well as creating an account and project.  If you have not done this you must follow the instructions here:
 
 * [Setting Up your Machine](https://docs.lbcs.dev/gettingstarted/setup.html)
+   * including the [Developer prerequisites](https://docs.lbcs.dev/developing/developing.html#prerequisites)
+   * and the protobuf compiler
 * [Your Lightbend Cloudstate Account](https://docs.lbcs.dev/gettingstarted/account.html)
 * [Creating a Project](https://docs.lbcs.dev/gettingstarted/project.html)
 
 ## Sample application layout
 Grab the sample application from github:
 
-[https://github.com/coreyauger/cloudstate-chat-sample](https://github.com/coreyauger/cloudstate-chat-sample)
+[https://github.com/lightbend/cloudstate-chat-sample](https://github.com/lightbend/cloudstate-chat-sample)
 
 The sample application consists of 3 services:
 * A stateless service `chat`
@@ -27,11 +29,13 @@ Additionally:
 ### Fiends Service
 ```
 cd friends
+npm install
 npm run prestart
 
 ```
 
-This will compile the protobuf and `user-function.desc`
+This will compile the protobuf and `user-function.desc`.
+
 Build a docker image with the right registry and tag
 ```
 docker build . -t <my-registry>/friends:latest
@@ -64,7 +68,8 @@ statefulservice.cloudstate.io/friends created
 
 ### presence Service
 ```
-cd presence
+cd ../presence
+npm install
 npm run prestart
 
 ```
@@ -122,11 +127,12 @@ statefulservice.cloudstate.io/friends created
 ### Chat
 The chat service is a front end web application written in typescript.  It is backed by a `stateless` service that will serve the compiled javacript, html and images.
 
-This service makes `grpc-web` calls directly to the other services to get the data that it needs.  In order to do this we need to compile the proto definitions from the other 2 services as well as generate the grpc-web clients.  This is all done with a shell script `protogen.sh`.  Let's first run the protogen, then compile the service definition and finally compile our typescript.
+This service makes `grpc-web` calls directly to the other services to get the data that it needs.  In order to do this we need to compile the proto definitions from the other two services as well as generate the grpc-web clients.  This is all done with a shell script `protogen.sh`.  Let's first run the protogen script, then compile the service definition and finally compile our typescript.
 
 ```
-cd chat
+cd ../chat
 ./protogen.sh
+npm install
 npm run prestart
 npm run-script build
 ```
