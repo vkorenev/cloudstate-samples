@@ -1,14 +1,115 @@
-jobs:
-  protoc:
-    docker:
-      - image: circleci/golang
-    steps:
-      - run: protoc --version
-orbs:
-  protobuf: izumin5210/protobuf@0.0.1
 version: 2.1
+
+orbs:
+  node: circleci/node@1.1.6
+  docker: circleci/docker@0.5.20
+  protobuf: izumin5210/protobuf@0.1.0
+
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: jonathancardoso/building-on-ci
+      DOCKER_REGISTRY: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/
+    docker:
+      - image: circleci/buildpack-deps:stretch
+
+commands:
+  install_protoc:
+    description: "Install Protoc"
+    parameters:
+      version:
+        type: string
+        default: "3.11.4"
+    steps:
+      - run:
+          name: "Install protoc"
+          command: |
+            mkdir -p /tmp/protoc
+            cd /tmp/protoc
+            wget https://github.com/protocolbuffers/protobuf/releases/download/v<< parameters.version >>/protoc-<< parameters.version >>-linux-x86_64.zip
+            unzip protoc*.zip
+            sudo mv bin/protoc /usr/local/bin/
+
+jobs:
+  build2:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            cd friends
+            npm insall
+            npm run prestart
+            docker build -t $DOCKER_REGISTRY/friends:latest .
+      - run:
+          name: Archive Docker image
+          command: docker save -o image.tar $IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./image.tar
+  node-test:
+    executor:
+      name: node/default
+      tag: '10.4'
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - checkout
+            - install_protoc
+            - run:
+                name: friends npm setup
+                command: |
+                  cd friends
+                  npm install
+                  npm run prestart
+                  cd ../
+            - run:
+                name: presence npm setup
+                command: |
+                  cd presence
+                  npm install
+                  npm run prestart
+                  cd ../
+            - run:
+                name: chat npm setup
+                command: |
+                  cd chat
+                  ./protogen.sh
+                  npm install
+                  npm run prestart
+                  npm run-script build
+                  cd ../
+  publish-latest:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $IMAGE_NAME:latest
 workflows:
-  build:
+  test:
     jobs:
-      - protobuf/install
-      - protoc
+      - node-test
+#  build-master:
+#    jobs:
+#      - build:
+#          filters:
+#            branches:
+#              only: master
+#      - publish-latest:
+#          requires:
+#            - build
+#          filters:
+#            branches:
+#              only: master
