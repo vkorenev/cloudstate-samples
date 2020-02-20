@@ -66,7 +66,7 @@ kubectl apply -f friends.yaml -n <project_name>
 statefulservice.cloudstate.io/friends created
 ````
 
-### presence Service
+### Presence Service
 ```
 cd ../presence
 npm install
@@ -105,7 +105,7 @@ kubectl apply -f presence.yaml -n <project-name>
 statefulservice.cloudstate.io/presence created
 ````
 
-### Verify they are running.
+### Verify they are running
 Check that the services are running
 ```
 kubectl get statefulservices -n <project-name>
