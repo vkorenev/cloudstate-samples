@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x 
 mkdir -p ./src/_proto/cloudstate
 mkdir -p ./src/_proto/google/api
 
