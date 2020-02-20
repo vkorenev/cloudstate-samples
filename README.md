@@ -26,7 +26,7 @@ Additionally:
 
 ## Building and deploying the Sample application
 
-### Fiends Service
+### Friends Service
 ```
 cd friends
 npm install
