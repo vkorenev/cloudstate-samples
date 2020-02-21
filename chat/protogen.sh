@@ -12,6 +12,7 @@ PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
 echo "Compile cloudstate entity key"
 protoc \
     --proto_path="node_modules/cloudstate/proto/google/api/" \
+    -I ./node_modules/cloudstate/protoc/include/  \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/google/api" \
     --ts_out="service=grpc-web:${OUT_DIR}/google/api" \
@@ -19,6 +20,7 @@ protoc \
 
 protoc \
     --proto_path="node_modules/cloudstate/proto/google/api/" \
+    -I ./node_modules/cloudstate/protoc/include/ \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/google/api" \
     --ts_out="service=grpc-web:${OUT_DIR}/google/api" \
@@ -26,6 +28,7 @@ protoc \
 
 protoc \
     --proto_path="node_modules/cloudstate/proto/google/api/" \
+    -I ./node_modules/cloudstate/protoc/include/  \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/google/api" \
     --ts_out="service=grpc-web:${OUT_DIR}/google/api" \
@@ -34,6 +37,7 @@ protoc \
 
 protoc \
     --proto_path="node_modules/cloudstate/proto/cloudstate/" \
+    -I ./node_modules/cloudstate/protoc/include/ \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/cloudstate" \
     --ts_out="service=grpc-web:${OUT_DIR}/cloudstate" \
