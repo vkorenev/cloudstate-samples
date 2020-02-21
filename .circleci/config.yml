@@ -81,7 +81,6 @@ jobs:
                   npm install
                   protoc --version
                   npm version
-#                  find node_modules/cloudstate
                   find . -name descriptor.proto
                   find . -name any.proto
                   ln -s ./node_modules/cloudstate/protoc/include/google/protobuf/any.proto ./node_modules/cloudstate/proto/google/api/any.proto
