@@ -80,6 +80,7 @@ jobs:
                   cd chat
                   npm install
                   protoc --version
+                  npm version
                   ./protogen.sh
                   npm run prestart
                   npm run-script build
