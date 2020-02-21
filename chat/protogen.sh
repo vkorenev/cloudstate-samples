@@ -11,7 +11,7 @@ PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
 
 echo "Compile cloudstate entity key"
 protoc \
-    --proto_path="node_modules/cloudstate/proto/google/api/"
+    --proto_path="node_modules/cloudstate/proto/google/api/" \
     --proto-path="node_modules/cloudstate/protoc/include/google/protobuf/" \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}/google/api" \
