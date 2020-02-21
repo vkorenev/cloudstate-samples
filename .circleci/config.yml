@@ -81,7 +81,7 @@ jobs:
                   npm install
                   protoc --version
                   npm version
-                  find node_modules
+                  ls node_modules
                   ./protogen.sh
                   npm run prestart
                   npm run-script build
