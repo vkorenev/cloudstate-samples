@@ -60,20 +60,20 @@ jobs:
           steps:
             - checkout
             - install_protoc
-#            - run:
-#                name: friends npm setup
-#                command: |
-#                  cd friends
-#                  npm install
-#                  npm run prestart
-#                  cd ../
-#            - run:
-#                name: presence npm setup
-#                command: |
-#                  cd presence
-#                  npm install
-#                  npm run prestart
-#                  cd ../
+            - run:
+                name: friends npm setup
+                command: |
+                  cd friends
+                  npm install
+                  npm run prestart
+                  cd ../
+            - run:
+                name: presence npm setup
+                command: |
+                  cd presence
+                  npm install
+                  npm run prestart
+                  cd ../
             - run:
                 name: chat npm setup
                 command: |
