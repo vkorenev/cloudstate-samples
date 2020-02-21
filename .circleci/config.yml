@@ -74,7 +74,6 @@ jobs:
                   npm install
                   npm run prestart
                   cd ../
-            - node/npm_install
             - run:
                 name: chat npm setup
                 command: |
