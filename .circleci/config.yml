@@ -83,6 +83,7 @@ jobs:
                   npm version
                   find node_modules/cloudstate
                   find . -name descriptor.proto
+                  find . -name any.proto
                   ./protogen.sh
                   npm run prestart
                   npm run-script build
