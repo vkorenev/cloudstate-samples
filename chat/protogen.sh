@@ -57,7 +57,7 @@ protoc \
 echo "Compile Friends Service"
 protoc \
     -I node_modules/cloudstate/proto/google/api/ \
-    -I node_modules/cloudstate/proto/cloudstate/ \
+    -I node_modules/cloudstate/proto/  \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}" \
     --ts_out="service=grpc-web:${OUT_DIR}" \
@@ -67,7 +67,7 @@ protoc \
 echo "Compile Presence Service"
 protoc \
     -I node_modules/cloudstate/proto/google/api/ \
-    -I node_modules/cloudstate/proto/cloudstate/ \
+    -I node_modules/cloudstate/proto/ \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}" \
     --ts_out="service=grpc-web:${OUT_DIR}" \
