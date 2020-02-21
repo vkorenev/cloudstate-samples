@@ -81,7 +81,7 @@ jobs:
                   npm install
                   protoc --version
                   npm version
-                  ls node_modules
+                  find node_modules/cloudstate
                   ./protogen.sh
                   npm run prestart
                   npm run-script build
