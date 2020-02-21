@@ -78,7 +78,7 @@ jobs:
                 name: chat npm setup
                 command: |
                   cd chat
-                  npm installl
+                  npm install
                   protoc --version
                   ./protogen.sh
                   npm run prestart
