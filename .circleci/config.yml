@@ -53,7 +53,7 @@ jobs:
   node-test:
     executor:
       name: node/default
-      tag: '10.4'
+      tag: '13.8.0'
     steps:
       - checkout
       - node/with-cache:
@@ -74,6 +74,7 @@ jobs:
                   npm install
                   npm run prestart
                   cd ../
+            - node/npm_install
             - run:
                 name: chat npm setup
                 command: |
