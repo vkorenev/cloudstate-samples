@@ -111,9 +111,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - ./friends.tar
-            - ./presence.tar
-            - ./chat.tar
+            - ./images.tar
 
   publish-latest:
     executor:
