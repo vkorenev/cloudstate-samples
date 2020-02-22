@@ -107,9 +107,7 @@ jobs:
       - run:
           name: Archive Docker images
           command: |
-            docker save -o friends.tar "$DOCKER_REGISTRY"/friends
-            docker save -o presence.tar "$DOCKER_REGISTRY"/presence
-            docker save -o chat.tar "$DOCKER_REGISTRY"/chat
+            docker svae -o images.tar "$DOCKER_REGISTRY"/friends "$DOCKER_REGISTRY"/presence "$DOCKER_REGISTRY"/chat
       - persist_to_workspace:
           root: .
           paths:
@@ -131,9 +129,10 @@ jobs:
           name: Load archived Docker image
           command: |
             docker images
-            docker load -i /tmp/workspace/friends.tar
-            docker load -i /tmp/workspace/presence.tar
-            docker load -i /tmp/workspace/chat.tar
+            #docker load -i /tmp/workspace/friends.tar
+            #docker load -i /tmp/workspace/presence.tar
+            #docker load -i /tmp/workspace/chat.tar
+            docker load -i /tmp/workspace/images.tar
             docker images
       - run:
           name: Publish Docker Images to BinTray
