@@ -64,15 +64,26 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - install_protoc
       - node/with-cache:
           cache-key: friends/package.json
           steps:
-            - checkout
-            - install_protoc
             - run:
-                name: friends npm setup
+                name: build friends docker image
                 command: |
                   cd friends
+                  npm install
+                  npm run prestart
+                  docker build -t "$DOCKER_REGISTRY"/friends:latest .
+                  docker images
+                  cd ../
+      - node/with-cache:
+          cache-key: presense/package.json
+          steps:
+            - run:
+                name: build presence docker image
+                command: |
+                  cd precense
                   npm install
                   npm run prestart
                   docker build -t "$DOCKER_REGISTRY"/friends:latest .
