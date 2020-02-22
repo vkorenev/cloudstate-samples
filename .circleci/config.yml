@@ -65,6 +65,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - node/with-cache:
+          cache-key: friends/package.json
           steps:
             - checkout
             - install_protoc
