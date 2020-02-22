@@ -62,7 +62,8 @@ protoc \
     --js_out="import_style=commonjs,binary:${OUT_DIR}" \
     --ts_out="service=grpc-web:${OUT_DIR}" \
     --proto_path="../friends" \
-     friends.proto
+    -I ../friends/node_modules/cloudstate/protoc/include \
+    ../friends/friends.proto
 
 echo "Compile Presence Service"
 protoc \
@@ -71,5 +72,5 @@ protoc \
     --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
     --js_out="import_style=commonjs,binary:${OUT_DIR}" \
     --ts_out="service=grpc-web:${OUT_DIR}" \
-    --proto_path="../presence" \
-     presence.proto
+    -I ../presence/node_modules/cloudstate/protoc/include \
+    ../presence/presence.proto
