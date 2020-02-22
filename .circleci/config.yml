@@ -60,7 +60,7 @@ jobs:
       name: node/default
       tag: '13.8.0'
     environment:
-      DOCKER_REGISTRY: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/
+      DOCKER_REGISTRY: lightbend-docker-registry.bintray.io/cloudstate-chat-sample
     steps:
       - checkout
       - setup_remote_docker
