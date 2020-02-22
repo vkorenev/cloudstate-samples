@@ -83,10 +83,10 @@ jobs:
             - run:
                 name: build presence docker image
                 command: |
-                  cd precense
+                  cd presence
                   npm install
                   npm run prestart
-                  docker build -t "$DOCKER_REGISTRY"/friends:latest .
+                  docker build -t "$DOCKER_REGISTRY"/presence:latest .
                   docker images
                   cd ../
 #            - run:
