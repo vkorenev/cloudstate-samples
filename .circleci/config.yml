@@ -74,25 +74,25 @@ jobs:
                   cd friends
                   npm install
                   npm run prestart
-                  docker build -t $DOCKER_REGISTRY/friends:latest .
+                  docker build -t "$DOCKER_REGISTRY"/friends:latest .
                   docker images
                   cd ../
-            - run:
-                name: presence npm setup
-                command: |
-                  cd presence
-                  npm install
-                  npm run prestart
-                  cd ../
-            - run:
-                name: chat npm setup
-                command: |
-                  cd chat
-                  npm install
-                  ./protogen.sh
-                  npm run prestart
-                  npm run-script build
-                  cd ../
+#            - run:
+#                name: presence npm setup
+#                command: |
+#                  cd presence
+#                  npm install
+#                  npm run prestart
+#                  cd ../
+#            - run:
+#                name: chat npm setup
+#                command: |
+#                  cd chat
+#                  npm install
+#                  ./protogen.sh
+#                  npm run prestart
+#                  npm run-script build
+#                  cd ../
   publish-latest:
     executor: docker-publisher
     steps:
