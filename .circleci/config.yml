@@ -90,22 +90,20 @@ jobs:
                   docker build -t "$DOCKER_REGISTRY"/presence:latest .
                   docker images
                   cd ../
-#            - run:
-#                name: presence npm setup
-#                command: |
-#                  cd presence
-#                  npm install
-#                  npm run prestart
-#                  cd ../
-#            - run:
-#                name: chat npm setup
-#                command: |
-#                  cd chat
-#                  npm install
-#                  ./protogen.sh
-#                  npm run prestart
-#                  npm run-script build
-#                  cd ../
+      - node/with-cache:
+          cache-key: chat/package.json
+          dir: chat/node_modules/
+          steps:
+            - run:
+                name: build chat docker image
+                command: |
+                  cd chat
+                  npm install
+                  ./protogen.sh
+                  npm run prestart
+                  docker build -t "$DOCKER_REGISTRY"/chat:latest .
+                  docker images
+                  cd ../
   publish-latest:
     executor: docker-publisher
     steps:
