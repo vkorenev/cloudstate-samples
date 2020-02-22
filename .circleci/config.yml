@@ -120,7 +120,7 @@ jobs:
       name: node/default
       tag: '13.8.0'
     environment:
-      DOCKER_IMAGE_TAG: latestx
+      DOCKER_IMAGE_TAG: 0.0.2
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -138,6 +138,13 @@ jobs:
           name: Publish Docker Images to BinTray
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin lightbend-docker-registry.bintray.io
+            docker tag "$DOCKER_REGISTRY"/friends:latest "$DOCKER_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker tag "$DOCKER_REGISTRY"/presence:latest "$DOCKER_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker tag "$DOCKER_REGISTRY"/chat:latest "$DOCKER_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            docker images "$DOCKER_REGISTRY"/friends
+            docker images "$DOCKER_REGISTRY"/chat
+            docker images "$DOCKER_REGISTRY"/presence
+            docker images
             docker push "$DOCKER_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
             docker push "$DOCKER_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
             docker push "$DOCKER_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
