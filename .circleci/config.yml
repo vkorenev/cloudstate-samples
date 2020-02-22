@@ -136,9 +136,10 @@ jobs:
             docker load -i /tmp/workspace/chat.tar
             docker images
       - run:
-          name: Publish Docker Image to Docker Hub
+          name: Publish Docker Images to BinTray
           command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin lightbend-docker-registry.bintray.io
+            # docker login -u srikanth.koneru@lightbend -p "$DOCKERHUB_PASS" lightbend-docker-registry.bintray.io
             docker push "$DOCKER_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
             docker push "$DOCKER_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
             docker push "$DOCKER_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
