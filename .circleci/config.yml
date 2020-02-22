@@ -67,6 +67,7 @@ jobs:
       - install_protoc
       - node/with-cache:
           cache-key: friends/package.json
+          dir: friends/node_modules/
           steps:
             - run:
                 name: build friends docker image
@@ -75,10 +76,10 @@ jobs:
                   npm install
                   npm run prestart
                   docker build -t "$DOCKER_REGISTRY"/friends:latest .
-                  docker images
                   cd ../
       - node/with-cache:
           cache-key: presense/package.json
+          dir: presence/node_modules/
           steps:
             - run:
                 name: build presence docker image
@@ -87,7 +88,6 @@ jobs:
                   npm install
                   npm run prestart
                   docker build -t "$DOCKER_REGISTRY"/presence:latest .
-                  docker images
                   cd ../
 #            - run:
 #                name: presence npm setup
