@@ -121,6 +121,8 @@ jobs:
     executor:
       name: node/default
       tag: '13.8.0'
+    environment:
+      DOCKER_IMAGE_TAG: latestu
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -137,7 +139,10 @@ jobs:
           name: Publish Docker Image to Docker Hub
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            docker push $IMAGE_NAME:latest
+            docker push "$DOCKER_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker push "$DOCKER_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker push "$DOCKER_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+
 workflows:
   test:
     jobs:
