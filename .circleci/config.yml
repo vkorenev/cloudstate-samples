@@ -107,7 +107,7 @@ jobs:
       - run:
           name: Archive Docker images
           command: |
-            docker svae -o images.tar "$DOCKER_REGISTRY"/friends "$DOCKER_REGISTRY"/presence "$DOCKER_REGISTRY"/chat
+            docker save -o images.tar "$DOCKER_REGISTRY"/friends "$DOCKER_REGISTRY"/presence "$DOCKER_REGISTRY"/chat
       - persist_to_workspace:
           root: .
           paths:
@@ -120,7 +120,7 @@ jobs:
       name: node/default
       tag: '13.8.0'
     environment:
-      DOCKER_IMAGE_TAG: latestu
+      DOCKER_IMAGE_TAG: latestx
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -138,7 +138,6 @@ jobs:
           name: Publish Docker Images to BinTray
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin lightbend-docker-registry.bintray.io
-            # docker login -u srikanth.koneru@lightbend -p "$DOCKERHUB_PASS" lightbend-docker-registry.bintray.io
             docker push "$DOCKER_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
             docker push "$DOCKER_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
             docker push "$DOCKER_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
