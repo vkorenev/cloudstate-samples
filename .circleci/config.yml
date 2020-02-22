@@ -78,7 +78,7 @@ jobs:
                   docker build -t "$DOCKER_REGISTRY"/friends:latest .
                   cd ../
       - node/with-cache:
-          cache-key: presense/package.json
+          cache-key: presence/package.json
           dir: presence/node_modules/
           steps:
             - run:
@@ -88,6 +88,7 @@ jobs:
                   npm install
                   npm run prestart
                   docker build -t "$DOCKER_REGISTRY"/presence:latest .
+                  docker images
                   cd ../
 #            - run:
 #                name: presence npm setup
