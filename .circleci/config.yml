@@ -75,7 +75,7 @@ jobs:
                   cd friends
                   npm install
                   npm run prestart
-                  docker build -t "$DOCKER_REGISTRY"/friends:latest .
+                  docker build -t "$DOCKER_REGISTRY"/friends .
                   cd ../
       - node/with-cache:
           cache-key: presence/package.json
@@ -87,7 +87,7 @@ jobs:
                   cd presence
                   npm install
                   npm run prestart
-                  docker build -t "$DOCKER_REGISTRY"/presence:latest .
+                  docker build -t "$DOCKER_REGISTRY"/presence .
                   docker images
                   cd ../
       - node/with-cache:
@@ -101,9 +101,22 @@ jobs:
                   npm install
                   ./protogen.sh
                   npm run prestart
-                  docker build -t "$DOCKER_REGISTRY"/chat:latest .
+                  docker build -t "$DOCKER_REGISTRY"/chat .
                   docker images
                   cd ../
+      - run:
+          name: Archive Docker images
+          command: |
+            docker save -o friends.tar "$DOCKER_REGISTRY"/friends
+            docker save -o presence.tar "$DOCKER_REGISTRY"/presence
+            docker save -o chat.tar "$DOCKER_REGISTRY"/chat
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./friends.tar
+            - ./presence.tar
+            - ./chat.tar
+
   publish-latest:
     executor: docker-publisher
     steps:
@@ -112,7 +125,12 @@ jobs:
       - setup_remote_docker
       - run:
           name: Load archived Docker image
-          command: docker load -i /tmp/workspace/image.tar
+          command: |
+            docker images
+            docker load -i /tmp/workspace/friends.tar
+            docker load -i /tmp/workspace/presence.tar
+            docker load -i /tmp/workspace/chat.tar
+            docker images
       - run:
           name: Publish Docker Image to Docker Hub
           command: |
@@ -122,6 +140,7 @@ workflows:
   test:
     jobs:
       - node-test
+      - publish-latest
 #  build-master:
 #    jobs:
 #      - build:
