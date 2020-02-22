@@ -55,7 +55,7 @@ jobs:
           root: .
           paths:
             - ./image.tar
-  node-test:
+  docker-build:
     executor:
       name: node/default
       tag: '13.8.0'
@@ -118,7 +118,9 @@ jobs:
             - ./chat.tar
 
   publish-latest:
-    executor: docker-publisher
+    executor:
+      name: node/default
+      tag: '13.8.0'
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -139,8 +141,11 @@ jobs:
 workflows:
   test:
     jobs:
-      - node-test
-      - publish-latest
+      - docker-build
+      - publish-latest:
+          requires:
+            - docker-build
+
 #  build-master:
 #    jobs:
 #      - build:
