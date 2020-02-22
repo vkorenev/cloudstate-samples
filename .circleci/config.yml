@@ -11,7 +11,12 @@ executors:
       IMAGE_NAME: jonathancardoso/building-on-ci
       DOCKER_REGISTRY: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: circleci/buildpack-deps:stretch'
+  node-builder:
+    environment:
+      IMAGE_NAME: jonathancardoso/building-on-ci
+      DOCKER_REGISTRY: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/
+
 
 commands:
   install_protoc:
@@ -54,6 +59,8 @@ jobs:
     executor:
       name: node/default
       tag: '13.8.0'
+    environment:
+      DOCKER_REGISTRY: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/
     steps:
       - checkout
       - setup_remote_docker
@@ -68,7 +75,7 @@ jobs:
                   npm install
                   npm run prestart
                   docker build -t $DOCKER_REGISTRY/friends:latest .
-                  docker images 
+                  docker images
                   cd ../
             - run:
                 name: presence npm setup
