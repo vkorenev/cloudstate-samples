@@ -5,5 +5,5 @@ metadata:
   name: friends
 spec:
   containers:
-  - image: coreyauger/friends:latest    # <-- Change this to your image
+  - image: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/friends:latest
     name: friends

@@ -1,0 +1,118 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@1.1.6
+
+commands:
+  install_protoc:
+    description: "Install Protoc"
+    parameters:
+      version:
+        type: string
+        default: "3.11.2"
+    steps:
+      - run:
+          name: "Install protoc"
+          command: |
+            mkdir -p /tmp/protoc
+            cd /tmp/protoc
+            wget https://github.com/protocolbuffers/protobuf/releases/download/v<< parameters.version >>/protoc-<< parameters.version >>-linux-x86_64.zip
+            unzip protoc*.zip
+            sudo mv bin/protoc /usr/local/bin/
+
+jobs:
+  docker-build:
+    executor:
+      name: node/default
+      tag: '13.8.0'
+    steps:
+      - checkout
+      - setup_remote_docker
+      - install_protoc
+      - node/with-cache:
+          cache-key: friends/package.json
+          dir: friends/node_modules/
+          steps:
+            - run:
+                name: build friends docker image
+                command: |
+                  cd friends
+                  npm install
+                  npm run prestart
+                  docker build -t "$DOCKER_LB_CS_CHAT_REGISTRY"/friends .
+      - node/with-cache:
+          cache-key: presence/package.json
+          dir: presence/node_modules/
+          steps:
+            - run:
+                name: build presence docker image
+                command: |
+                  cd presence
+                  npm install
+                  npm run prestart
+                  docker build -t "$DOCKER_LB_CS_CHAT_REGISTRY"/presence .
+      - node/with-cache:
+          cache-key: chat/package.json
+          dir: chat/node_modules/
+          steps:
+            - run:
+                name: build chat docker image
+                command: |
+                  cd chat
+                  npm install
+                  ./protogen.sh
+                  npm run prestart
+                  docker build -t "$DOCKER_LB_CS_CHAT_REGISTRY"/chat .
+      - run:
+          name: Archive Docker images
+          command: |
+            docker save -o images.tar "$DOCKER_LB_CS_CHAT_REGISTRY"/friends "$DOCKER_LB_CS_CHAT_REGISTRY"/presence "$DOCKER_LB_CS_CHAT_REGISTRY"/chat
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./images.tar
+
+  publish-to-registry:
+    executor:
+      name: node/default
+      tag: '13.8.0'
+    environment:
+      DOCKER_IMAGE_TAG: latest
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: |
+            docker load -i /tmp/workspace/images.tar
+      - run:
+          name: Publish Docker Images to BinTray
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin "$DOCKER_LB_REGISTRY"
+            docker tag "$DOCKER_LB_CS_CHAT_REGISTRY"/friends:latest "$DOCKER_LB_CS_CHAT_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker tag "$DOCKER_LB_CS_CHAT_REGISTRY"/presence:latest "$DOCKER_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker tag "$DOCKER_LB_CS_CHAT_REGISTRY"/chat:latest "$DOCKER_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            docker push "$DOCKER_LB_CS_CHAT_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker push "$DOCKER_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker push "$DOCKER_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+workflows:
+  test:
+    jobs:
+      - docker-build
+      - publish-to-registry:
+          requires:
+            - docker-build
+
+#  build-master:
+#    jobs:
+#      - build:
+#          filters:
+#            branches:
+#              only: master
+#      - publish-latest:
+#          requires:
+#            - build
+#          filters:
+#            branches:
+#              only: master
