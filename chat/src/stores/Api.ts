@@ -72,6 +72,7 @@ export class Api{
     }
 
     monitorPresence = (user: User) =>{
+        console.log("monitorPresence")
         const client = new PresenceClient(this.host);    
         const userpb = new UserPesence();
         userpb.setName(user.name);
