@@ -209,3 +209,13 @@ Open a web browser and navigate to:
 
 You should now see the front end chat interface.
 
+## Maintenance notes
+
+### License
+The license is Apache 2.0, see LICENSE-2.0.txt.
+
+### Maintained by
+This project is maintained mostly by @coreyauger and @cloudstateio.
+
+Feel free to ping above maintainers for code review or discussions. Pull requests are very welcome–thanks in advance!
+
