@@ -11,7 +11,7 @@ The following assumes that you have completed the steps for setting up your loca
 
 ## Sample application layout
 Grab the sample application from github:
-
+ 
 [https://github.com/lightbend/cloudstate-chat-sample](https://github.com/lightbend/cloudstate-chat-sample)
 
 The sample application consists of 3 services:
