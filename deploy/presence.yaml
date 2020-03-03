@@ -1,9 +1,0 @@
-# Stateful service descriptor for the presence app
-apiVersion: cloudstate.io/v1alpha1
-kind: StatefulService
-metadata:
-  name: presence
-spec:
-  containers:
-  - image: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/presence:latest
-    name: presence
