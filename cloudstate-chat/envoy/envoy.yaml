@@ -1,0 +1,52 @@
+static_resources:
+  listeners:
+  - name: listener_0
+    address:
+      socket_address: { address: 0.0.0.0, port_value: 9090 }
+    filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        config:
+          codec_type: auto
+          stat_prefix: ingress_http
+          access_log:
+          - name: envoy.file_access_log
+            typed_config:
+              "@type": type.googleapis.com/envoy.config.accesslog.v2.FileAccessLog
+              path: "/dev/stdout"
+          route_config:
+            name: local_route
+            #request_headers_to_remove: ["grpc-accept-encoding"]
+            virtual_hosts:
+            - name: local_service
+              domains: ["*"]
+              routes:
+              - match:
+                  prefix: "/site"
+                route:
+                  cluster: node_service
+              - match: { prefix: "/site/index.html" }
+                route:
+                  cluster: node_service
+              - match: { prefix: "/" }
+                route:
+                  cluster: backend_grpc_service
+                  max_grpc_timeout: 0s
+          http_filters:
+          - name: envoy.grpc_web
+          - name: envoy.router
+  clusters:
+  - name: backend_grpc_service
+    connect_timeout: 10s
+    http2_protocol_options: {}
+    type: logical_dns
+    lb_policy: round_robin
+    hosts:
+    - socket_address:
+        address: docker.for.mac.localhost
+        port_value: 9000
+  - name: node_service
+    connect_timeout: 10s
+    type: logical_dns    
+    lb_policy: round_robin
+    hosts: [{ socket_address: { address: docker.for.mac.localhost, port_value: 3000 }}]

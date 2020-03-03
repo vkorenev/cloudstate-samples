@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: remove-grpc-accept-encoding
+  #namespace: istio-config # as defined in meshConfig resource.
+spec:
+  configPatches:
+  - applyTo: HTTP_ROUTE
+    match:
+      context: ANY # will match outbound listeners in all sidecars
+      routeConfiguration:
+        portNumber: 80
+    patch:
+      operation: MERGE
+      value:
+        request_headers_to_remove: ["grpc-accept-encoding"]
+
