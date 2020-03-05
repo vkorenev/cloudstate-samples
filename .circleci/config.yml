@@ -36,35 +36,35 @@ jobs:
       - setup_remote_docker
       - install_protoc
       - node/with-cache:
-          cache-key: friends/package.json
-          dir: friends/node_modules/
+          cache-key: chat/friends/package.json
+          dir: chat/friends/node_modules/
           steps:
             - run:
                 name: build friends docker image
                 command: |
-                  cd friends
+                  cd chat/friends
                   npm install
                   npm run prestart
                   docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends .
       - node/with-cache:
-          cache-key: presence/package.json
-          dir: presence/node_modules/
+          cache-key: chat/presence/package.json
+          dir: chat/presence/node_modules/
           steps:
             - run:
                 name: build presence docker image
                 command: |
-                  cd presence
+                  cd chat/presence
                   npm install
                   npm run prestart
                   docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence .
       - node/with-cache:
-          cache-key: chat/package.json
-          dir: chat/node_modules/
+          cache-key: chat/chat/package.json
+          dir: chat/chat/node_modules/
           steps:
             - run:
                 name: build chat docker image
                 command: |
-                  cd chat
+                  cd chat/chat
                   npm install
                   ./protogen.sh
                   npm run prestart
