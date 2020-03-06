@@ -24,12 +24,11 @@ Additionally:
 * A `deploy` directory that contains the deployment yaml files.
 * An `envoy` directory for running a local envoy proxy instance (local testing only).
 
+## Quick Install
 
-### Quick Install
+All the latest docker images are available publicly at `lightbend-docker-registry.bintray.io/`.
 
-All the latest  docker images are available publicly at `lightbend-docker-registry.bintray.io/`.
-
-Connect to you kubernetes environment to deploy chat application, do the following...
+To deploy the chat application as is, connect to your kubernetes environment and do the following.
 
 ```bash
 cd deploy
@@ -46,7 +45,7 @@ To access the front end chat interface open a web browser and navigate to:
 `https://<project-name>.us-east1.apps.lbcs.dev/pages/chat.html`
 
 If you would like to make changes and build the application, please follow the
-instructions in below section.
+instructions in the section below.
 
 ## Building and deploying the Sample application
 
