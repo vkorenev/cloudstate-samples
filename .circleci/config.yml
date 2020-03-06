@@ -1,4 +1,10 @@
 version: 2.1
+# CI for cloudstate-samples/chat application
+# DEPENDS ON Env variables   
+# BINTRAY_LB_USERNAME typesafe-tools
+# BINTRAY_LB_PASS    xxxxxa5c
+# BINTRAY_LB_REGISTRY cloudstate-samples
+# BINTRAY_LB_CS_CHAT_REGISTRY lightbend-docker-registry.bintray.io
 
 orbs:
   node: circleci/node@1.1.6
@@ -30,43 +36,43 @@ jobs:
       - setup_remote_docker
       - install_protoc
       - node/with-cache:
-          cache-key: friends/package.json
-          dir: friends/node_modules/
+          cache-key: chat/friends/package.json
+          dir: chat/friends/node_modules/
           steps:
             - run:
                 name: build friends docker image
                 command: |
-                  cd friends
+                  cd chat/friends
                   npm install
                   npm run prestart
-                  docker build -t "$DOCKER_LB_CS_CHAT_REGISTRY"/friends .
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends .
       - node/with-cache:
-          cache-key: presence/package.json
-          dir: presence/node_modules/
+          cache-key: chat/presence/package.json
+          dir: chat/presence/node_modules/
           steps:
             - run:
                 name: build presence docker image
                 command: |
-                  cd presence
+                  cd chat/presence
                   npm install
                   npm run prestart
-                  docker build -t "$DOCKER_LB_CS_CHAT_REGISTRY"/presence .
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence .
       - node/with-cache:
-          cache-key: chat/package.json
-          dir: chat/node_modules/
+          cache-key: chat/chat/package.json
+          dir: chat/chat/node_modules/
           steps:
             - run:
                 name: build chat docker image
                 command: |
-                  cd chat
+                  cd chat/chat
                   npm install
                   ./protogen.sh
                   npm run prestart
-                  docker build -t "$DOCKER_LB_CS_CHAT_REGISTRY"/chat .
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat .
       - run:
           name: Archive Docker images
           command: |
-            docker save -o images.tar "$DOCKER_LB_CS_CHAT_REGISTRY"/friends "$DOCKER_LB_CS_CHAT_REGISTRY"/presence "$DOCKER_LB_CS_CHAT_REGISTRY"/chat
+            docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat
       - persist_to_workspace:
           root: .
           paths:
@@ -89,30 +95,22 @@ jobs:
       - run:
           name: Publish Docker Images to BinTray
           command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin "$DOCKER_LB_REGISTRY"
-            docker tag "$DOCKER_LB_CS_CHAT_REGISTRY"/friends:latest "$DOCKER_LB_CS_CHAT_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
-            docker tag "$DOCKER_LB_CS_CHAT_REGISTRY"/presence:latest "$DOCKER_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
-            docker tag "$DOCKER_LB_CS_CHAT_REGISTRY"/chat:latest "$DOCKER_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
-            docker push "$DOCKER_LB_CS_CHAT_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
-            docker push "$DOCKER_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
-            docker push "$DOCKER_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            echo "$BINTRAY_LB_PASS" | docker login -u "$BINTRAY_LB_USERNAME" --password-stdin "$BINTRAY_LB_REGISTRY"
+            docker tag "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends:latest "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker tag "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence:latest "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker tag "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat:latest "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+
+
 workflows:
   test:
     jobs:
-      - docker-build
+      - docker-build:
+        filters:
+          branches:
+            only:master
       - publish-to-registry:
           requires:
             - docker-build
-
-#  build-master:
-#    jobs:
-#      - build:
-#          filters:
-#            branches:
-#              only: master
-#      - publish-latest:
-#          requires:
-#            - build
-#          filters:
-#            branches:
-#              only: master

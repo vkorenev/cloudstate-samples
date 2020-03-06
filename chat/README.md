@@ -24,6 +24,29 @@ Additionally:
 * A `deploy` directory that contains the deployment yaml files.
 * An `envoy` directory for running a local envoy proxy instance (local testing only).
 
+## Quick Install
+
+All the latest docker images are available publicly at `lightbend-docker-registry.bintray.io/`.
+
+To deploy the chat application as is, connect to your kubernetes environment and do the following.
+
+```bash
+cd deploy
+kubectl apply -f . -n <project-name>
+# To Verify
+kubectl -n <project-name>  get statefulservices
+NAME       REPLICAS   STATUS
+friends    1          Ready
+presence   1          Ready
+```
+
+To access the front end chat interface open a web browser and navigate to:
+
+`https://<project-name>.us-east1.apps.lbcs.dev/pages/chat.html`
+
+If you would like to make changes and build the application, please follow the
+instructions in the section below.
+
 ## Building and deploying the Sample application
 
 ### Friends Service
