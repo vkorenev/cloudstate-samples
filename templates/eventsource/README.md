@@ -13,40 +13,20 @@ The following assumes that you have completed the steps for setting up your loca
 * Source code `js` and `proto` files are in this directory
 * A `deploy` directory that contains the deployment yaml files.
 
-
 ### Storage Setup
 * Modify `deploy/postgres-store.yaml`
     * Uniquify the store `name`
-* Modify js-shopping-cart.yaml to match
+* Modify my-service.yaml to match
 *   Change `spec|storeConfig|statefulStore|name` to match the name used above
 
+## You Code
+You want to make changes to the following files:
+* Edit both the `domain.proto` and the `myservice.proto`, renaming those files as you see fit.
+* Once your model, command and events are defined how like we need to know impliment the service.
+* Edit the `index.js` file.  Again renaming the file and contents to your liking.
+   * Follow the comments in these files as a guide to help you edit.
+
 ## Building 
-
-### Deployment
-```bash
-cd deploy
-kubectl apply -f . -n <project-name>
-# To Verify
-kubectl -n <project-name>  get statefulservices
-NAME            REPLICAS   STATUS
-my-service      1          Ready
-```
-
-To verify the statefulstore use the following:
-```bash
-kubectl get statefulstore -n <project-name>
-NAME                  AGE
-my-postgres           21m
-```
-
-To access the front end chat interface open a web browser and navigate to:
-
-`https://<project-name>.us-east1.apps.lbcs.dev/pages/index.html`
-
-If you would like to make changes and build the application, please follow the
-instructions in the section below.
-
-## Building and deploying your service
 ```
 npm install
 npm run prestart
@@ -78,6 +58,14 @@ spec:
     name: my-service
 ```
 
+## Deploy
+
+Deploy the stateful store to your project namespace
+```
+kubectl apply -f postgres-store.yaml -n <project-name>
+statefulstore.cloudstate.io/my-postgres created
+````
+
 Deploy the service to your project namespace
 ```
 kubectl apply -f my-service.yaml -n <project-name>
@@ -90,10 +78,14 @@ Check that the service is running
 kubectl get statefulservices -n <project-name>
 NAME             REPLICAS   STATUS
 my-service       1          Ready
+
+kubectl get statefulstore -n <project-name>
+NAME             REPLICAS   STATUS
+my-postgres      1          Ready
 ```
 
 To redeploy a new image to the cluster you must delete and then redeploy using the yaml file.  
-For example if we updated the shopping-cart docker image we would do the following.
+For example if we updated the my-service docker image we would do the following.
 ````
 kubectl delete statefulservice my-service -n <project-name>
 statefulservice.cloudstate.io "my-service" deleted
@@ -102,7 +94,7 @@ statefulservice.cloudstate.io/my-service created
 ````
 
 ## Routes
-The last thing that is required is to provide the public routes needed for both the front end and grpc-web calls.  These exist in the `routes.yaml` file.
+Public routes can be used through grpc and grpc-web calls.  These exist in the `routes.yaml` file.
 
 ```
 cat routes.yaml
@@ -125,7 +117,9 @@ Add these routes by performing
 kubectl apply -f routes.yaml -n <project-name>
 ```
 
-The web url that will resolve the above route it:
+The web url that will resolve the above route to the default route:
+NOTE: that utilities like `grpcurl` user service reflection on the default route `/`.  What this means is that you 
+can only use `grpcurl` with the service on the default route.
 
 `https://<project-name>.us-east1.apps.lbcs.dev/`
 
@@ -145,4 +139,4 @@ Feel free to ping above maintainers for code review or discussions. Pull request
 
 ### Disclaimer
 
-[DISCLAIMER.txt](DISCLAIMER.txt)
+[DISCLAIMER.txt](../DISCLAIMER.txt)

@@ -1,5 +1,5 @@
 
-# Cloudstate Sampl Applications
+# Cloudstate Sample Applications
 
 The following assumes that you have completed the steps for setting up your local environment as well as creating an account and project.  If you have not done this you must follow the instructions here:
 
