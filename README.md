@@ -1,5 +1,5 @@
 
-# Cloudstate Sampl Applications
+# Cloudstate Sample Applications
 
 The following assumes that you have completed the steps for setting up your local environment as well as creating an account and project.  If you have not done this you must follow the instructions here:
 
@@ -15,7 +15,7 @@ Grab the sample application from github:
 [https://github.com/lightbend/cloudstate-samples](https://github.com/lightbend/cloudstate-samples)
 
 ## Shopping Cart
-Event sourced example with postgre `statefulstore`.  Simple shop front end to interact with.
+Event sourced example with postgres `statefulstore`.  Simple shop front end to interact with.
 * [shopping-cart](shopping-cart)
 
 ## Chat Sample
