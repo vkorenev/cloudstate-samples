@@ -35,12 +35,12 @@
   },
   "scripts": {
     "test": "mocha",
-    "prestart": "compile-descriptor ./shoppingcart.proto",
-    "pretest": "compile-descriptor ./shoppingcart.proto",
+    "prestart": "compile-descriptor ./myservice.proto",
+    "pretest": "compile-descriptor ./myservice.proto",
     "start": "node index.js",
     "start-no-prestart": "node index.js",
-    "dockerbuild": "docker build -f ./Dockerfile -t ${DOCKER_PUBLISH_TO:-cloudstateio}/js-shopping-cart:latest ../..",
-    "dockerpush": "docker push ${DOCKER_PUBLISH_TO:-cloudstateio}/js-shopping-cart:latest",
+    "dockerbuild": "docker build -f ./Dockerfile -t ${DOCKER_PUBLISH_TO:-cloudstateio}/my-service:latest ../..",
+    "dockerpush": "docker push ${DOCKER_PUBLISH_TO:-cloudstateio}/my-service:latest",
     "dockerbuildpush": "npm run dockerbuild && npm run dockerpush"
   }
 }

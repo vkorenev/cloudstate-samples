@@ -58,7 +58,7 @@ service MyService {
     // The call to add an item to our entity.  Additionally we provide a 
     // named http endpoint.  To see how you might use this endpoint you 
     // must first understand the route.yaml file in the deploy folder.
-    rpc MyAddItem(MyAddItem) returns (google.protobuf.Empty) {
+    rpc AddItem(MyAddItem) returns (google.protobuf.Empty) {
         option (google.api.http) = {
             post: "/state/{user_id}/items/add",
             body: "*",
@@ -67,12 +67,12 @@ service MyService {
     }
 
     // Call to remove an item to our entity.
-    rpc MyRemoveItem(MyRemoveItem) returns (google.protobuf.Empty) {
+    rpc RemoveItem(MyRemoveItem) returns (google.protobuf.Empty) {
         option (google.api.http).post = "/state/{user_id}/items/{id}/remove";
     }
 
     // Call to return the state from an entity.
-    rpc MyGetState(MyGetState) returns (MyState) {
+    rpc GetState(MyGetState) returns (MyState) {
         option (google.api.http) = {
           get: "/state/{user_id}",
           additional_bindings: {
