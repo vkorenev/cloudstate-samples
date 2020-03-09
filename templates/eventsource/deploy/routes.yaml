@@ -2,13 +2,13 @@
 apiVersion: cloudstate.io/v1alpha1
 kind: Route
 metadata:
-  name: shopping-routes
+  name: my-routes
 spec:
   http:
-  - name: shopping-routes
+  - name: my-routes
     match:
     - uri:
         prefix: /
     route:
-      service: shopping-cart    
+      service: my-service
 
