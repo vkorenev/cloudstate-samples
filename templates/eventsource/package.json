@@ -1,7 +1,7 @@
 {
-  "name": "js-shopping-cart",
+  "name": "my-service",
   "version": "0.1.0",
-  "description": "Sample CloudState event sourced shopping cart application",
+  "description": "Sample CloudState event sourced  application",
   "keywords": [
     "serverless",
     "cloudstate",
@@ -19,8 +19,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cloudstateio/cloudstate",
-    "directory": "src/samples/js-shopping-cart"
+    "url": "https://github.com/lightbend/cloudstate-samples",
+    "directory": "/templates/eventsource"
   },
   "//": "https://npm.community/t/npm-install-does-not-install-transitive-dependencies-of-local-dependency/2264",
   "dependencies": {
