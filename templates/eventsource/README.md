@@ -115,6 +115,25 @@ can only use `grpcurl` with the service on the default route.
 
 `https://<project-name>.us-east1.apps.lbcs.dev/`
 
+## Testing
+You can now use `curl` in combination with the `option (google.api.http)` that you defined in your `myservice.proto'.  For more information 
+on how json is encoded to protobuf see: [https://cloud.google.com/endpoints/docs/grpc/transcoding](https://cloud.google.com/endpoints/docs/grpc/transcoding).
+
+### Adding an item
+```
+curl -v  -H  "Content-Type:application/json"  https://<PROJECT_NAME>.us-east1.apps.lbcs.dev/state/{user_id}/items/add -d '{"user_id":"username", "id":"test", "name":"test", quantity: 1}'
+```
+
+### Getting the state
+```
+curl -v -H 'Content-Type:application/json'  https://<PROJECT_NAME>.us-east1.apps.lbcs.dev/state/{user_id}/items
+```
+
+### Removing an item
+```
+curl -v  -XPOST -H  "Content-Type:application/json"  https://<PROJECT_NAME>.us-east1.apps.lbcs.dev/state/{user_id}/items/{id}/remove
+```
+
 
 ## Maintenance notes
 
