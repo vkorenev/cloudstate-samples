@@ -62,9 +62,9 @@ entity.setBehavior(state => {
     // Command handlers. The name of the command corresponds to the name of the rpc call in
     // the gRPC service that this entity offers.
     commandHandlers: {
-      MyAddItem: myAddItem,
-      MyRemoveItem: myRemoveItem,
-      MyGetState: myGetState
+      AddItem: myAddItem,
+      RemoveItem: myRemoveItem,
+      GetState: myGetState
     },
     // Event handlers. The name of the event corresponds to the (unqualified) name of the
     // persisted protobuf message.
