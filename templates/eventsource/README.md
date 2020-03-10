@@ -1,23 +1,16 @@
 
-# Cloudstate Service
-
-The following assumes that you have completed the steps for setting up your local environment as well as creating an account and project.  If you have not done this you must follow the instructions here:
-
-* [Setting Up your Machine](https://docs.lbcs.dev/gettingstarted/setup.html)
-   * as well as the [Developer prerequisites](https://docs.lbcs.dev/developing/developing.html#prerequisites)
-   * You also need to install the protobuf compiler.
-* [Your Lightbend Cloudstate Account](https://docs.lbcs.dev/gettingstarted/account.html)
-* [Creating a Project](https://docs.lbcs.dev/gettingstarted/project.html)
-
 ## Layout
-* Source code `js` and `proto` files are in this directory
-* A `deploy` directory that contains the deployment yaml files.
+* `myservice.proto` - This is the gRPC interface that is exposed to the rest of the world. The user function doesn't implement this directly, it passes it to the Akka backend, that implements it, and then proxies all requests to the user function through an event sourcing specific protocol. Note the use of the `cloudstate.entity_key` field option extension, this is used to indicate which field(s) form the entity key, which the Akka backend will use to identify entities and shard them.
+* `domain.proto` - These are the protobuf message definitions for the domain events and state. They are used to serialize and deserialize events stored in the journal, as well as being used to store the current state which gets serialized and deserialized as snapshots when snapshotting is used.
+* `myservice.js` - This is the JavaScript code for implementing the service entity user function. It defines handlers for events and commands. It uses the cloudstate-event-sourcing Node.js module to actually implement the event sourcing protocol
+* `deploy` directory that contains the deployment yaml files.
 
 ### Storage Setup
 * Modify `deploy/postgres-store.yaml`
-    * Uniquify the store `name`
+    * Change the `name` to be unique amongst your services.
+    * eg: `myservice-postgres`
 * Modify my-service.yaml to match
-*   Change `spec|storeConfig|statefulStore|name` to match the name used above
+    * Change `spec|storeConfig|statefulStore|name` to match the name used above
 
 ## You Code
 You want to make changes to the following files:
@@ -33,8 +26,7 @@ npm run prestart
 
 ```
 
-This will compile the protobuf and `user-function.desc`
-Build a docker image with the right registry and tag
+This will create `user-function.desc` which describes your stateful function to Cloudstate
 ```
 docker build . -t <my-registry>/my-service:latest
 ```
@@ -72,8 +64,8 @@ kubectl apply -f my-service.yaml -n <project-name>
 statefulservice.cloudstate.io/my-service created
 ````
 
-### Verify they are running
-Check that the service is running
+### Verify they are ready
+Check that the service is in the ready state.
 ```
 kubectl get statefulservices -n <project-name>
 NAME             REPLICAS   STATUS
@@ -132,7 +124,7 @@ The license is Apache 2.0, see [LICENSE-2.0.txt](LICENSE-2.0.txt).
 ### Maintained by
 __This project is NOT supported under the Lightbend subscription.__
 
-This project is maintained mostly by @coreyauger and @cloudstateio.
+If you find any issues with these instructions, please report them [here](https://github.com/lightbend/cloudstate-samples/pull/link_to_issue_tracker).
 
 Feel free to ping above maintainers for code review or discussions. Pull requests are very welcome–thanks in advance!
 
