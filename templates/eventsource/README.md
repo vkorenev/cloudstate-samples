@@ -12,7 +12,7 @@
 * Modify my-service.yaml to match
     * Change `spec|storeConfig|statefulStore|name` to match the name used above
 
-## You Code
+## Your Code
 You want to make changes to the following files:
 * Edit both the `domain.proto` and the `myservice.proto`, renaming those files as you see fit.
 * Once your model, command and events are defined how like we need to know impliment the service.
