@@ -65,8 +65,7 @@ service MyService {
         option (google.api.http) = {
             post: "/state/{user_id}/items/add",
             body: "*",
-        };
-        option (.cloudstate.eventing).in = "items";
+        };        
     }
 
     // Call to remove an item to our entity.
