@@ -9,21 +9,20 @@
 * Modify `deploy/postgres-store.yaml`
     * Change the `name` to be unique amongst your services.
     * eg: `myservice-postgres`
-* Modify my-service.yaml to match
+* Modify `my-service.yaml` to match
     * Change `spec|storeConfig|statefulStore|name` to match the name used above
 
 ## Your Code
 You want to make changes to the following files:
 * Edit both the `domain.proto` and the `myservice.proto`, renaming those files as you see fit.
-* Once your model, command and events are defined how like we need to know impliment the service.
-* Edit the `index.js` file.  Again renaming the file and contents to your liking.
+* Once your model, command and events are defined how you like, we need to know implement the service.
+* Edit the `index.js` file, again renaming the file and contents to your liking.
    * Follow the comments in these files as a guide to help you edit.
 
 ## Building 
 ```
 npm install
 npm run prestart
-
 ```
 
 This will create `user-function.desc` which describes your stateful function to Cloudstate
