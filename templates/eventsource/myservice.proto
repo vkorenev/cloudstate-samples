@@ -40,7 +40,7 @@ message MyGetState {
 }
 
 // This type is our data Item that we store in our state.
-// Change this items to reflect your own model.
+// Change this item to reflect your own model.
 message MyItem {
     string id = 1;
     string name = 2;
@@ -54,7 +54,7 @@ message MyState {
 }
 
 // This is the actual service definition.  We will use these methods 
-// to handle data coming in and go out of our service.  In an event
+// to handle data coming in and going out of our service.  In an event
 // sourced service like this one, calls usually reflect the commands that 
 // we have defined above. 
 service MyService {
@@ -70,7 +70,7 @@ service MyService {
         };        
     }
 
-    // Call to remove an item to our entity.
+    // Call to remove an item from our entity.
     rpc RemoveItem(MyRemoveItem) returns (google.protobuf.Empty) {
         // option (google.api.http) specifies that this method is a gRPC HTTP mapping annotation
         // for more info see: https://cloud.google.com/endpoints/docs/grpc/transcoding

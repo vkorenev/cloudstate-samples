@@ -1,7 +1,7 @@
 // These are the messages that get persisted - the events, plus the current state (Cart) for snapshots.
 syntax = "proto3";
 
-// change this to reflect you organization and project namespace
+// change this to reflect your organization and project namespace
 package com.example.myservice.persistence;
 
 option go_package = "persistence";
@@ -27,7 +27,7 @@ message MyItemRemoved {
     string id = 1;
 }
 
-// This this the state for a user.
+// This is the state for a user.
 // It countains a list of items
 message MyState {
     repeated MyItem items = 1;
