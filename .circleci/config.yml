@@ -76,7 +76,7 @@ jobs:
             - run:
                 name: build chat docker image
                 command: |
-                  cd cshopping-cart/frontend/
+                  cd  hopping-cart/frontend/
                   npm install
                   ./protogen.sh
                   npm run prestart
