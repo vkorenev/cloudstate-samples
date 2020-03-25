@@ -82,6 +82,17 @@ jobs:
                   npm run prestart
                   npm run-script build
                   docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/frontend .
+      - node/with-cache:
+          cache-key: shopping-cart/js-shopping-cart
+          dir: shopping-cart/js-shopping-cart/node_modules/
+          steps:
+            - run:
+                name: build chat docker image
+                command: |
+                  cd  hopping-cart/frontend/
+                  npm install
+                  npm run prestart
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/js-shopping-cart .
       - run:
           name: Archive Docker images
           command: |
