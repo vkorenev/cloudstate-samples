@@ -35,28 +35,28 @@ jobs:
       - checkout
       - setup_remote_docker
       - install_protoc
-      - node/with-cache:
-          cache-key: chat/friends/package.json
-          dir: chat/friends/node_modules/
-          steps:
-            - run:
-                name: build friends docker image
-                command: |
-                  cd chat/friends
-                  npm install
-                  npm run prestart
-                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends .
-      - node/with-cache:
-          cache-key: chat/presence/package.json
-          dir: chat/presence/node_modules/
-          steps:
-            - run:
-                name: build presence docker image
-                command: |
-                  cd chat/presence
-                  npm install
-                  npm run prestart
-                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence .
+#      - node/with-cache:
+#          cache-key: chat/friends/package.json
+#          dir: chat/friends/node_modules/
+#          steps:
+#            - run:
+#                name: build friends docker image
+#                command: |
+#                  cd chat/friends
+#                  npm install
+#                  npm run prestart
+#                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends .
+#      - node/with-cache:
+#          cache-key: chat/presence/package.json
+#          dir: chat/presence/node_modules/
+#          steps:
+#            - run:
+#                name: build presence docker image
+#                command: |
+#                  cd chat/presence
+#                  npm install
+#                  npm run prestart
+#                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence .
       - node/with-cache:
           cache-key: chat/chat/package.json
           dir: chat/chat/node_modules/
@@ -69,10 +69,24 @@ jobs:
                   ./protogen.sh
                   npm run prestart
                   docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat .
+      - node/with-cache:
+          cache-key: shopping-cart/frontend/
+          dir: shopping-cart/frontend//node_modules/
+          steps:
+            - run:
+                name: build chat docker image
+                command: |
+                  cd cshopping-cart/frontend/
+                  npm install
+                  ./protogen.sh
+                  npm run prestart
+                  npm run-script build
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/frontend .
       - run:
           name: Archive Docker images
           command: |
-            docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat
+#            docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat
+             docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat "$BINTRAY_LB_CS_CHAT_REGISTRY"/frontend
       - persist_to_workspace:
           root: .
           paths:
