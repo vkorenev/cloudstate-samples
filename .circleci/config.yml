@@ -85,7 +85,6 @@ jobs:
       - run:
           name: Archive Docker images
           command: |
-#            docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat
              docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat "$BINTRAY_LB_CS_CHAT_REGISTRY"/frontend
       - persist_to_workspace:
           root: .
