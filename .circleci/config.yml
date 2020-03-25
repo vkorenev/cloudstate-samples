@@ -69,10 +69,34 @@ jobs:
                   ./protogen.sh
                   npm run prestart
                   docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat .
+      - node/with-cache:
+          cache-key: shopping-cart/frontend/
+          dir: shopping-cart/frontend//node_modules/
+          steps:
+            - run:
+                name: build chat docker image
+                command: |
+                  cd  hopping-cart/frontend/
+                  npm install
+                  ./protogen.sh
+                  npm run prestart
+                  npm run-script build
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/frontend .
+      - node/with-cache:
+          cache-key: shopping-cart/js-shopping-cart
+          dir: shopping-cart/js-shopping-cart/node_modules/
+          steps:
+            - run:
+                name: build chat docker image
+                command: |
+                  cd  hopping-cart/frontend/
+                  npm install
+                  npm run prestart
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/js-shopping-cart .
       - run:
           name: Archive Docker images
           command: |
-            docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat
+             docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat "$BINTRAY_LB_CS_CHAT_REGISTRY"/frontend
       - persist_to_workspace:
           root: .
           paths:
@@ -103,7 +127,6 @@ jobs:
             docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
             docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
 
-
 workflows:
   test:
     jobs:
@@ -111,6 +134,6 @@ workflows:
         filters:
           branches:
             only:master
-      - publish-to-registry:
-          requires:
-            - docker-build
+#      - publish-to-registry:
+#          requires:
+#            - docker-build
