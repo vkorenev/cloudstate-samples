@@ -35,28 +35,28 @@ jobs:
       - checkout
       - setup_remote_docker
       - install_protoc
-#      - node/with-cache:
-#          cache-key: chat/friends/package.json
-#          dir: chat/friends/node_modules/
-#          steps:
-#            - run:
-#                name: build friends docker image
-#                command: |
-#                  cd chat/friends
-#                  npm install
-#                  npm run prestart
-#                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends .
-#      - node/with-cache:
-#          cache-key: chat/presence/package.json
-#          dir: chat/presence/node_modules/
-#          steps:
-#            - run:
-#                name: build presence docker image
-#                command: |
-#                  cd chat/presence
-#                  npm install
-#                  npm run prestart
-#                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence .
+      - node/with-cache:
+          cache-key: chat/friends/package.json
+          dir: chat/friends/node_modules/
+          steps:
+            - run:
+                name: build friends docker image
+                command: |
+                  cd chat/friends
+                  npm install
+                  npm run prestart
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends .
+      - node/with-cache:
+          cache-key: chat/presence/package.json
+          dir: chat/presence/node_modules/
+          steps:
+            - run:
+                name: build presence docker image
+                command: |
+                  cd chat/presence
+                  npm install
+                  npm run prestart
+                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence .
       - node/with-cache:
           cache-key: chat/chat/package.json
           dir: chat/chat/node_modules/
@@ -116,7 +116,6 @@ jobs:
             docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
             docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
 
-
 workflows:
   test:
     jobs:
@@ -124,6 +123,6 @@ workflows:
         filters:
           branches:
             only:master
-      - publish-to-registry:
-          requires:
-            - docker-build
+#      - publish-to-registry:
+#          requires:
+#            - docker-build
