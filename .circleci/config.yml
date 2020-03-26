@@ -138,7 +138,7 @@ jobs:
 workflows:
   test:
     jobs:
-      - docker-build:
+      - docker-build
 #        filters:
 #          branches:
 #            only:master
