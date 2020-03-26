@@ -25,6 +25,9 @@ Additionally:
 
 ## Building and deploying the Sample application
 
+Below are the instructions to create your own instance of the sample application and deploy it to 
+Lightbend Cloudstate. As you proceed, you can see the changes in your project in the Web UI as well.
+
 ### Frontend Service
 The frontend service is a front end web application written in typescript.  It is backed by a `stateless` service that will serve the compiled javacript, html and images.
 
@@ -40,7 +43,7 @@ npm run-script build
 
 This will compile the protobuf and `user-function.desc`.
 
-Build a docker image with the right registry and tag
+Build a docker image with the correct registry and tag
 
 NOTE: you can get a free public docker registry by signing up at [https://hub.docker.com](https://hub.docker.com/)
 ```
@@ -53,7 +56,8 @@ Push the docker image to the registry
 docker push <my-registry>/frontend:latest
 ```
 
-Deploy the image by changing into the deploy folder and editing the `frontend.yaml` to point to your docker image that you just pushed.
+Deploy the image by first changing into the deploy folder and editing the `frontend.yaml` to point to your docker image that you just pushed:
+
 ```
 $ cd ../deploy
 $ cat frontend.yaml
@@ -67,12 +71,12 @@ spec:
     name: frontend
 ```
 
-Deploy the service to your project namespace
+Then deploy the service to your project namespace:
+
 ```
-kubectl apply -f frontend.yaml -n <project_name>
+kubectl apply -f frontend.yaml
 statefulservice.cloudstate.io/frontend created
 ````
-
 
 ### Stateful Store
 
@@ -80,9 +84,19 @@ The shopping cart stateful service relies on a stateful store as defined in `sho
 
 Deploy the store to your project namespace
 ```
-$ kubectl apply -f shopping-store.yaml -n <project-name>
+$ kubectl apply -f shopping-store.yaml 
 statefulstore.cloudstate.io/shopping-store created
 ````
+
+Note that it may take a few minutes for your initial stateful store to become available, as it is
+initialized only once you perform the above steps.
+
+#### Verify the stateful store
+```bash
+$ kubectl get statefulstore
+NAME                  AGE
+shopping-store   21m
+```
 
 ### Shopping Cart Service
 ```
@@ -126,27 +140,18 @@ spec:
 
 Deploy the service to your project namespace
 ```
-$ kubectl apply -f js-shopping-cart.yaml -n <project-name>
+$ kubectl apply -f js-shopping-cart.yaml
 statefulservice.cloudstate.io/shopping-cart created
 ````
 
 ### Verify they are running
 Check that the services are running
 ```
-$ kubectl get statefulservices -n <project-name>
+$ kubectl get statefulservices
 NAME             REPLICAS   STATUS
 shopping-cart    1          Ready
 frontend         1          Ready
 ```
-
-To redeploy a new image to the cluster you must delete and then redeploy using the yaml file.  
-For example if we updated the shopping-cart docker image we would do the following.
-````
-$ kubectl delete statefulservice shopping-cart -n <project-name>
-statefulservice.cloudstate.io "shopping-cart" deleted
-$ kubectl apply -f js-shopping-cart.yaml -n <project-name>    
-statefulservice.cloudstate.io/shopping-cart created
-````
 
 ## Routes
 The last thing that is required is to provide the public routes needed for both the front end and grpc-web calls.  These exist in the `routes.yaml` file.
@@ -175,7 +180,7 @@ spec:
 
 Add these routes by performing
 ```
-kubectl apply -f routes.yaml -n <project-name>
+kubectl apply -f routes.yaml
 ```
 
 Open a web browser and navigate to:
@@ -186,20 +191,22 @@ You should now see the shopping cart interface.
 
 ## Quick Install
 
-All the latest docker images are available publicly at `lightbend-docker-registry.bintray.io/`.
+If you prefer to just run the shopping cart application without building it yourself, all the latest docker images are available publicly at `lightbend-docker-registry.bintray.io/`.
 
-To deploy the shopping cart application as is, connect to your kubernetes environment and do the following.
+Connect to your kubernetes environment (as described above) and do the following.
 
 ### Deployment
 ```bash
 $ cd deploy
-$ kubectl apply -f . -n <project-name>
+$ kubectl apply -f .
+
 # verify stateful store
-$ kubectl get -n <project-name> statefulstore
+$ kubectl get statefulstore
 NAME                  AGE
 shopping-store   21m
+
 # verify stateful services
-$ kubectl -n <project-name>  get statefulservices
+$ kubectl get statefulservices
 NAME            REPLICAS   STATUS
 frontend        1          Ready
 shopping-cart   1          Ready
@@ -208,6 +215,17 @@ shopping-cart   1          Ready
 To access the front end chat interface open a web browser and navigate to:
 
 `https://<project-name>.us-east1.apps.lbcs.dev/pages/index.html`
+
+## Deleting and Re-Deploying
+
+To redeploy a new image to the cluster you must delete and then redeploy using the yaml file.  
+For example if we updated the shopping-cart docker image we would do the following.
+````
+$ kubectl delete statefulservice shopping-cart
+statefulservice.cloudstate.io "shopping-cart" deleted
+$ kubectl apply -f js-shopping-cart.yaml 
+statefulservice.cloudstate.io/shopping-cart created
+````
 
 ## Maintenance notes
 
