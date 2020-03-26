@@ -1,10 +1,10 @@
 version: 2.1
 # CI for cloudstate-samples/chat application
 # DEPENDS ON Env variables   
-# BINTRAY_LB_USERNAME typesafe-tools
-# BINTRAY_LB_PASS    xxxxxa5c
-# BINTRAY_LB_REGISTRY cloudstate-samples
-# BINTRAY_LB_CS_CHAT_REGISTRY lightbend-docker-registry.bintray.io
+# LB_BT_USERNAME typesafe-tools
+# LB_BT_PASSCODE    xxxxxa5c
+# LB_BT_REGISTRY lightbend-docker-registry.bintray.io
+# LB_BT_CS_SAMPLES_REGISTRY cloudstate_samples
 
 orbs:
   node: circleci/node@1.1.6
@@ -45,7 +45,7 @@ jobs:
                   cd chat/friends
                   npm install
                   npm run prestart
-                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends .
+                  docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/friends .
       - node/with-cache:
           cache-key: chat/presence/package.json
           dir: chat/presence/node_modules/
@@ -56,7 +56,7 @@ jobs:
                   cd chat/presence
                   npm install
                   npm run prestart
-                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence .
+                  docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/presence .
       - node/with-cache:
           cache-key: chat/chat/package.json
           dir: chat/chat/node_modules/
@@ -68,7 +68,7 @@ jobs:
                   npm install
                   ./protogen.sh
                   npm run prestart
-                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat .
+                  docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/chat .
       - node/with-cache:
           cache-key: shopping-cart/frontend/
           dir: shopping-cart/frontend//node_modules/
@@ -81,7 +81,7 @@ jobs:
                   ./protogen.sh
                   npm run prestart
                   npm run-script build
-                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/frontend .
+                  docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/frontend .
       - node/with-cache:
           cache-key: shopping-cart/js-shopping-cart
           dir: shopping-cart/js-shopping-cart/node_modules/
@@ -92,11 +92,15 @@ jobs:
                   cd  hopping-cart/frontend/
                   npm install
                   npm run prestart
-                  docker build -t "$BINTRAY_LB_CS_CHAT_REGISTRY"/js-shopping-cart .
+                  docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart .
       - run:
           name: Archive Docker images
           command: |
-             docker save -o images.tar "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat "$BINTRAY_LB_CS_CHAT_REGISTRY"/frontend
+             docker save -o images.tar  "$LB_BT_CS_SAMPLES_REGISTRY"/friends \
+                                        "$LB_BT_CS_SAMPLES_REGISTRY"/presence \
+                                        "$LB_BT_CS_SAMPLES_REGISTRY"/chat \
+                                        "$LB_BT_CS_SAMPLES_REGISTRY"/frontend \
+                                        "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart
       - persist_to_workspace:
           root: .
           paths:
@@ -119,13 +123,17 @@ jobs:
       - run:
           name: Publish Docker Images to BinTray
           command: |
-            echo "$BINTRAY_LB_PASS" | docker login -u "$BINTRAY_LB_USERNAME" --password-stdin "$BINTRAY_LB_REGISTRY"
-            docker tag "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends:latest "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
-            docker tag "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence:latest "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
-            docker tag "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat:latest "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
-            docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
-            docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
-            docker push "$BINTRAY_LB_CS_CHAT_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            echo "$LB_BT_PASSCODE" | docker login -u "$LB_BT_USERNAME" --password-stdin "$LB_BT_REGISTRY"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/friends:latest "$LB_BT_CS_SAMPLES_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/presence:latest "$LB_BT_CS_SAMPLES_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/chat:latest "$LB_BT_CS_SAMPLES_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/frontend:latest "$LB_BT_CS_SAMPLES_REGISTRY"/frontend:"$DOCKER_IMAGE_TAG"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:latest "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/frontend:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:"$DOCKER_IMAGE_TAG"            
 
 workflows:
   test:
