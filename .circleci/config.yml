@@ -142,6 +142,6 @@ workflows:
       - publish-to-registry:
           requires:
             - docker-build
-        filters:
-          branches:
-            only:master
+          filters:
+            branches:
+              only: master
