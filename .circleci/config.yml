@@ -139,9 +139,9 @@ workflows:
   test:
     jobs:
       - docker-build
-#        filters:
-#          branches:
-#            only:master
       - publish-to-registry:
           requires:
             - docker-build
+        filters:
+          branches:
+            only:master
