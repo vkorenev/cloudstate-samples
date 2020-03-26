@@ -70,8 +70,8 @@ jobs:
                   npm run prestart
                   docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/chat .
       - node/with-cache:
-          cache-key: shopping-cart/frontend/
-          dir: shopping-cart/frontend//node_modules/
+          cache-key: shopping-cart/frontend/package.json
+          dir: shopping-cart/frontend/node_modules/
           steps:
             - run:
                 name: build chat docker image
@@ -83,7 +83,7 @@ jobs:
                   npm run-script build
                   docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/frontend .
       - node/with-cache:
-          cache-key: shopping-cart/js-shopping-cart
+          cache-key: shopping-cart/js-shopping-cart/package.json
           dir: shopping-cart/js-shopping-cart/node_modules/
           steps:
             - run:
@@ -124,16 +124,16 @@ jobs:
           name: Publish Docker Images to BinTray
           command: |
             echo "$LB_BT_PASSCODE" | docker login -u "$LB_BT_USERNAME" --password-stdin "$LB_BT_REGISTRY"
-            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/friends:latest "$LB_BT_CS_SAMPLES_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
-            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/presence:latest "$LB_BT_CS_SAMPLES_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
-            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/chat:latest "$LB_BT_CS_SAMPLES_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
-            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/frontend:latest "$LB_BT_CS_SAMPLES_REGISTRY"/frontend:"$DOCKER_IMAGE_TAG"
-            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:latest "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:"$DOCKER_IMAGE_TAG"
-            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
-            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
-            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
-            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/frontend:"$DOCKER_IMAGE_TAG"
-            docker push "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:"$DOCKER_IMAGE_TAG"            
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/friends:latest "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/presence:latest "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/chat:latest "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/frontend:latest "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/frontend:"$DOCKER_IMAGE_TAG"
+            docker tag "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:latest "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/friends:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/presence:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/chat:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/frontend:"$DOCKER_IMAGE_TAG"
+            docker push "$LB_BT_REGISTRY/$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart:"$DOCKER_IMAGE_TAG"
 
 workflows:
   test:
