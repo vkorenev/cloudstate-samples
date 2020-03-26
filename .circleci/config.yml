@@ -76,7 +76,7 @@ jobs:
             - run:
                 name: build chat docker image
                 command: |
-                  cd  hopping-cart/frontend/
+                  cd  shopping-cart/frontend/
                   npm install
                   ./protogen.sh
                   npm run prestart
@@ -139,9 +139,9 @@ workflows:
   test:
     jobs:
       - docker-build:
-        filters:
-          branches:
-            only:master
-#      - publish-to-registry:
-#          requires:
-#            - docker-build
+#        filters:
+#          branches:
+#            only:master
+      - publish-to-registry:
+          requires:
+            - docker-build
