@@ -23,23 +23,6 @@ Additionally:
 * A `cloudstate` directory that contains proto definitions needed.
 * A `deploy` directory that contains the deployment yaml files.
 
-### Quick Install
-
-All the latest docker images are available publicly at `lightbend-docker-registry.bintray.io/`.
-
-To deploy the chat application as is, connect to your kubernetes environment and do the following.
-
-```bash
-cd deploy
-kubectl apply -f . -n <project-name>
-
-# To Verify
-kubectl -n <project-name>  get statefulservices
-NAME       REPLICAS   STATUS
-shopping-cart-postgres    1          Ready
-```
-
-
 ## Building and deploying the Sample application
 
 ### Frontend Service
@@ -135,7 +118,7 @@ spec:
     database: shopping
     statefulStore:
       # Name of a deployed Datastore to use.
-      name: shopping-postgres
+      name: shopping-postgres77
   containers:
     - image: coreyauger/shopping-cart:latest
       name: js-shopping-cart
