@@ -80,7 +80,7 @@ metadata:
   name: frontend
 spec:
   containers:
-  - image: <your-registry>/frontend:latest    # <-- Change this to your repo/image
+  - image: lightbend-docker-registry.bintray.io/cloudstate-samples/shopping-cart:latest # <-- Change this to your repo/image
     name: frontend
 ```
 
@@ -137,7 +137,7 @@ spec:
       # Name of a deployed Datastore to use.
       name: shopping-store
   containers:
-    - image: <your-registry>/shopping-cart:latest    # <-- Change this to your repo/image
+    - image:  lightbend-docker-registry.bintray.io/cloudstate-samples/frontend:latest # <-- Change this to your repo/image
       name: js-shopping-cart
 ```
 

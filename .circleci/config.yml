@@ -74,7 +74,7 @@ jobs:
           dir: shopping-cart/frontend/node_modules/
           steps:
             - run:
-                name: build chat docker image
+                name: build shopping cart frontend docker image
                 command: |
                   cd  shopping-cart/frontend/
                   npm install
@@ -87,7 +87,7 @@ jobs:
           dir: shopping-cart/js-shopping-cart/node_modules/
           steps:
             - run:
-                name: build chat docker image
+                name: build shopping cart docker image
                 command: |
                   cd  shopping-cart/frontend/
                   npm install
