@@ -89,7 +89,7 @@ jobs:
             - run:
                 name: build chat docker image
                 command: |
-                  cd  hopping-cart/frontend/
+                  cd  shopping-cart/frontend/
                   npm install
                   npm run prestart
                   docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart .
