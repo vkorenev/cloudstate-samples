@@ -5,5 +5,5 @@ metadata:
   name: friends
 spec:
   containers:
-  - image: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/friends:latest
+  - image: lightbend-docker-registry.bintray.io/cloudstate-samples/friends:latest
     name: friends
