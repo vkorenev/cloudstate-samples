@@ -5,5 +5,5 @@ metadata:
   name: chat
 spec:
   containers:
-  - image: lightbend-docker-registry.bintray.io/cloudstate-chat-sample/chat:latest
+  - image: lightbend-docker-registry.bintray.io/cloudstate-samples/chat:latest
     name: chat
