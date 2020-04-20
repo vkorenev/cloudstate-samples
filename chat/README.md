@@ -150,12 +150,12 @@ statefulservice.cloudstate.io/friends created
 ### Chat
 The chat service is a front end web application written in typescript.  It is backed by a `stateless` service that will serve the compiled javacript, html and images.
 
-This service makes `grpc-web` calls directly to the other services to get the data that it needs.  In order to do this we need to compile the proto definitions from the other two services as well as generate the grpc-web clients.  This is all done with a shell script `protogen.sh`.  Let's first run the protogen script, then compile the service definition and finally compile our typescript.
+This service makes `grpc-web` calls directly to the other services to get the data that it needs.  In order to do this we need to compile the proto definitions from the other two services as well as generate the grpc-web clients.  This is all done with a shell script `protogen.sh`.  Let's first install dependencies, including cloudstate javascript client library, and then run the protogen script. Next compile the service definition and finally compile our typescript.
 
 ```
 cd ../chat
-./protogen.sh
 npm install
+./protogen.sh
 npm run prestart
 npm run-script build
 ```
