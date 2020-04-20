@@ -26,7 +26,7 @@ Event sourced example with postgres `statefulstore`.  Simple shop front end to i
 
 ## Chat Sample
 CRDT chat with simple front end web interface, friends storage, and presence state.
-* [chat](chats)
+* [chat](chat)
 
 ## Maintenance notes
 
