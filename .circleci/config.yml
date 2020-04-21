@@ -89,7 +89,7 @@ jobs:
             - run:
                 name: build shopping cart docker image
                 command: |
-                  cd  shopping-cart/frontend/
+                  cd  shopping-cart/js-shopping-cart/
                   npm install
                   npm run prestart
                   docker build -t "$LB_BT_CS_SAMPLES_REGISTRY"/shopping-cart .
