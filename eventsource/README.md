@@ -150,7 +150,7 @@ $ curl -v -XPOST -H "Content-Type:application/json" https://<PROJECT_NAME>.us-ea
 
 ### Listing added items
 ```
-$ curl -v -H 'Content-Type:application/json' https://<PROJECT_NAME>.us-east1.apps.lbcs.io/state/{user_id}/items
+$ curl -v -H "Content-Type:application/json" https://<PROJECT_NAME>.us-east1.apps.lbcs.io/state/{user_id}/items
 ```
 
 ### Removing an item
