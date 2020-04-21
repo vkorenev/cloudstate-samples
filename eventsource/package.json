@@ -1,7 +1,7 @@
 {
   "name": "my-service",
   "version": "0.1.0",
-  "description": "Sample CloudState event sourced  application",
+  "description": "Sample CloudState event sourced application",
   "keywords": [
     "serverless",
     "cloudstate",
