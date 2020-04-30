@@ -1,4 +1,6 @@
 user-function.desc
+.gradle/
+.idea/
 build/
 node_modules/
 **/src/_proto/
