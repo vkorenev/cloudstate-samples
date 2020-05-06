@@ -7,7 +7,9 @@ import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 
 
 export class Api{
+    // Is this var needed? It does not seem to be used anywhere.
     store: any = null;
+    // I think it would be nice to have some explanation why this URL is built this way.
     host = window.location.protocol + "//"+window.location.hostname + (window.location.hostname == "localhost" ? ":" + window.location.port : "");
     client = new ShoppingCartClient(this.host);
 
@@ -21,6 +23,7 @@ export class Api{
         addItem.setProductId(item.id);
         addItem.setQuantity(quantity);
         addItem.setUserId(user.name);
+        // Why is this header needed?
         const metadata = new BrowserHeaders({'x-custom-header-1': 'example'});
         
         return new Promise<void>( (resolve, reject) => {
