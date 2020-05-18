@@ -7,6 +7,8 @@ The following assumes that you have completed the steps for setting up your loca
 
 * [Setting Up your Machine](https://docs.lbcs.dev/gettingstarted/setup.html)
    * as well as the [Developer prerequisites](https://docs.lbcs.dev/developing/developing.html#prerequisites)
+   * Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) (node version manager)
+      * We recommend v0.34.0 or later.  (Check with `nvm --version`)
    * Install [npm](https://www.npmjs.com/get-npm) (node package manager)
       * We recommend v6.14.3 or later.  (Check with `npm -v`)
    * You also need to install the protobuf compiler.
