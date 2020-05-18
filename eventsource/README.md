@@ -21,6 +21,8 @@ You want to make changes to the following files:
 
 ## Building
 ```
+nvm install
+nvm use
 npm install
 npm run prestart
 ```
