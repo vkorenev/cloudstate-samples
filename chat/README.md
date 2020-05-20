@@ -48,6 +48,8 @@ instructions in the section below.
 ### Friends Service
 ```
 cd friends
+nvm install
+nvm use
 npm install
 npm run prestart
 ```
@@ -87,6 +89,8 @@ statefulservice.cloudstate.io/friends created
 ### Presence Service
 ```
 cd ../presence
+nvm install
+nvm use
 npm install
 npm run prestart
 ```
@@ -148,6 +152,8 @@ This service makes `grpc-web` calls directly to the other services to get the da
 
 ```
 cd ../chat
+nvm install
+nvm use
 npm install
 ./protogen.sh
 npm run prestart
