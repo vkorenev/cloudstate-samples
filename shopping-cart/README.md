@@ -98,7 +98,7 @@ Deploy the service to your project namespace
 ```
 kubectl apply -f frontend.yaml -n <project_name>
 statefulservice.cloudstate.io/frontend created
-````
+```
 
 
 ### Stateful Store
@@ -109,9 +109,12 @@ Deploy the store to your project namespace
 ```
 $ kubectl apply -f shopping-store.yaml -n <project-name>
 statefulstore.cloudstate.io/shopping-store created
-````
+```
 
 ### Shopping Cart Service
+
+#### 1a. Build Node JS Shopping Cart Service container image
+
 ```
 cd ../js-shopping-cart
 nvm install
@@ -132,6 +135,37 @@ Push the docker image to the registry
 ```
 docker push <my-registry>/shopping-cart:latest
 ```
+
+#### 1b. Build Java Shopping Cart Service container image
+
+Alternatively, you can build Java implementation of Shopping Cart Service.
+```
+cd ../java-shopping-cart
+```
+Edit `jib` section of `build.gradle`
+```
+jib {
+  from {
+    image = "adoptopenjdk/openjdk8:debian"
+  }
+  to {
+    image = "<my-registry>/shopping-cart"
+    tags = ["latest"]
+  }
+  container {
+    mainClass = "io.cloudstate.samples.shoppingcart.Main"
+    ports = ["8080"]
+  }
+}
+```
+You might also want to set up authentication for your container registry. Please refer to [Jib plugin documentation](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods) for further information.
+
+Build and push an image to your container registry
+```
+./gradlew build jib
+```
+
+#### 2. Deploy Shopping Cart Service
 
 Deploy the image by changing into the deploy folder and editing `shopping-cart.yaml` to point to the docker image that you just pushed.
 ```
